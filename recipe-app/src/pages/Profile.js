@@ -9,7 +9,6 @@ const Profile = () => {
     <Box sx={{ display: 'flex', minHeight: '100vh' }}>
       <RegularSidebar />
       <Box component="main" sx={{ flexGrow: 1, p: 5, display: 'flex', flexDirection: 'column', alignItems: 'center', position: 'relative' }}>
-        c
         {/* Profile Title */}
         <Typography variant="h4" sx={{ mb: 4 }}>
           Your Profile

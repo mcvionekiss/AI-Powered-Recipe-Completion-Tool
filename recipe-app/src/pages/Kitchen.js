@@ -8,7 +8,10 @@ const Kitchen = () => {
     <Box sx={{ display: 'flex' }}>
       <RegularSidebar />
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
-        <p>Kitchen</p>
+        <Box sx={{ textAlign: 'center', mt: 2 }}>
+          <h1>Your Kitchen</h1>
+          <hr style={{ marginTop: '16px', marginBottom: '16px', border: 'none', borderTop: '2px solid #ccc' }} />
+        </Box>
       </Box>
       <ProfileButton />
     </Box>

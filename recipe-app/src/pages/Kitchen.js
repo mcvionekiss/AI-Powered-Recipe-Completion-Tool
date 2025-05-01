@@ -3,6 +3,8 @@ import RegularSidebar from '../components/RegularSidebar';
 import ProfileButton from '../components/ProfileButton';
 import { Box } from '@mui/material';
 
+
+// kitchen page
 const Kitchen = () => {
   return (
     <Box sx={{ display: 'flex' }}>

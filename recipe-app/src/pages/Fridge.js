@@ -8,14 +8,20 @@ import Icon from "@mdi/react";
 import { mdiFridge } from "@mdi/js";
 import { useState } from "react";
 import { FoodItem } from "../components/foodItem"; // Adjust the import path as necessary
+import FoodItemInfo from "../components/FoodItemInfo"; // Adjust the import path as necessary
 
 const Fridge = () => {
   const [foodItems, setFoodItems] = useState([
     { name: "Food Item 1", quantity: "3" },
     { name: "Food Item 2", quantity: "1" },
     { name: "Food Item 3", quantity: "10" },
-    // Add more food items as needed
+    { name: "Food Item 4", quantity: "10" },
+    { name: "Food Item 5", quantity: "10" },
+    { name: "Food Item 6", quantity: "10" },
+    { name: "Food Item 7", quantity: "10" },
   ]);
+
+  const [selectedFoodItem, setSelectedFoodItem] = useState(null);
 
   const handleAddFoodItem = (newFoodItem) => {
     for (let i = 0; i < foodItems.length; i++) {
@@ -33,6 +39,20 @@ const Fridge = () => {
     setFoodItems((prevItems) => [...prevItems, newFoodItem]);
   };
 
+  const handleDeleteFoodItem = (foodItemToDelete) => {
+    // Filter out the food item to delete
+    const updatedFoodItems = foodItems.filter(
+      (foodItem) => foodItem.name !== foodItemToDelete.name
+    );
+    setFoodItems(updatedFoodItems);
+  };
+
+  const handleShowFoodItemDetails = (foodItem) => {
+    // Handle showing food item details here
+    console.log("Showing details for:", foodItem);
+    setSelectedFoodItem(foodItem);
+  };
+
   return (
     <Box sx={{ display: "flex", height: "100vh" }}>
       <RegularSidebar />
@@ -44,9 +64,9 @@ const Fridge = () => {
           display: "flex",
           flexDirection: "column",
           p: 3,
-          justifyContent: "flex-start", // top of the page
-          alignItems: "center", // center horizontally
-          gap: 2, // optional spacing between elements
+          justifyContent: "flex-start",
+          alignItems: "center",
+          gap: 2,
           overflow: "auto",
         }}>
         <h1>Add new food!</h1>
@@ -89,9 +109,9 @@ const Fridge = () => {
             flexDirection: "column",
             justifyContent: "center",
             alignItems: "center",
-            gap: 2,
-            width: "100%",
-            height: 500, // <-- Fixed height for the outer box
+            gap: 1,
+            width: "95%",
+            height: "100%", // <-- Fixed height for the outer box
           }}>
           <Box
             sx={{
@@ -114,19 +134,31 @@ const Fridge = () => {
               borderRadius: 2,
               border: "1px solid black",
               display: "flex",
-              flexDirection: "column",
+              flexDirection: "row",
+              flexWrap: "wrap",
               justifyContent: "flex-start",
-              alignItems: "center",
+              alignItems: "flex-start",
               gap: 1,
-              width: "99%",
+              width: "100%",
               height: "100%",
               overflowY: "auto",
-              padding: 3,
+              padding: 1,
             }}>
             {/* Example food items */}
             {foodItems.map((foodItem, index) => (
-              <FoodItem key={index} foodItem={foodItem} />
+              <FoodItem
+                key={index}
+                foodItem={foodItem}
+                onClick={handleShowFoodItemDetails}
+                onDelete={handleDeleteFoodItem}
+              />
             ))}
+            {selectedFoodItem && (
+              <FoodItemInfo
+                foodItem={selectedFoodItem}
+                onClose={() => setSelectedFoodItem(null)}
+              />
+            )}
           </Box>
         </Box>
       </Box>

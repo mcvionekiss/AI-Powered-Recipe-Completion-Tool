@@ -1,0 +1,32 @@
+#generateRecipe {
+    background-color: lightblue;
+    width: 180px;
+    color: black;
+    border-radius: 8px;
+    font-size: 16px;
+    height: 35px; /* Add if you want a specific height */
+    border: none;
+    transition: 0.3s ease;
+    cursor: pointer;
+  }
+  
+  #generateRecipe:hover {
+    background-color: #1e88e5; /* darker on hover */
+    color: white;
+  }
+
+
+#filter{
+    color: black;
+    background-color: lightgrey;
+    border-radius: 8px;
+    font-size: 16px;
+    width: 100px;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    cursor: pointer;
+}
+

@@ -9,7 +9,7 @@ import './Kitchen.css'; // Import the CSS file for styling
 // kitchen page
 const Kitchen = () => {
   return (
-    <Box sx={{ display: 'flex' }}>
+    <Box sx={{ display: 'flex'}}>
       <RegularSidebar />
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
         <Box sx={{ textAlign: 'center', mt: 2 }}>
@@ -34,10 +34,39 @@ const Kitchen = () => {
         </Box>
 
       </Box>
+
+
       
       <ProfileButton />
+
+     
+      {/* <Box
+      id="food-list-container"
+      sx={{
+        backgroundColor: "#f0f0f0",
+        borderRadius: 2,
+        border: "1px solid black",
+        display: "flex",
+        flexDirection: "row",
+        flexWrap: "wrap",
+        justifyContent: "flex-start",
+        alignItems: "flex-start",
+        gap: 1,
+        width: "100%",
+        height: "100%",
+        overflowY: "auto",
+        padding: 1,
+      }}>
+      </Box> */}
+
     </Box>
 
+    
+    
+
+
+          
+      
     
 
 

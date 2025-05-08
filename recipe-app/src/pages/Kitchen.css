@@ -5,7 +5,7 @@
     border-radius: 8px;
     font-size: 16px;
     height: 35px; 
-    border: none;
+    border: 2px solid black;
     transition: 0.3s ease;
     cursor: pointer;
   }
@@ -31,6 +31,6 @@
 }
 
 #filter:hover{
-    background-color: #1e88e5;
+    background-color: #828282;
     color: white;
 }

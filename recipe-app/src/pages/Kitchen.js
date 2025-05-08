@@ -9,39 +9,35 @@ import './Kitchen.css'; // Import the CSS file for styling
 // kitchen page
 const Kitchen = () => {
   return (
-    <Box sx={{ display: 'flex'}}>
-      <RegularSidebar />
-      <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
-        <Box sx={{ textAlign: 'center', mt: 2 }}>
-          <h1>Your Kitchen</h1>
-          <hr style={{ marginTop: '16px', marginBottom: '16px', border: 'none', borderTop: '2px solid #ccc' }} />
-        </Box>
-        <Box size="large" sx={{ display: 'flex', justifyContent: 'space-between', mt: 2 }}>
-          <button id ="filter">
-            <img src={filterIcon} alt= "filter icon" style={{
-               width: '16px', height: '16px',
-               borderRadius: '50%',
-               border: '2px solidrgb(0, 0, 0)',
-               padding: '4px',              
-               backgroundColor: 'white'    
-               }} />
-            Filter
-          </button>
-          <button id="generateRecipe">
-            Generate Recipe
-          </button>
+    <Box sx={{ display: 'flex' }}>
+  <RegularSidebar />
+  <Box component="main" sx={{ flexGrow: 1, p: 3, display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+    <Box sx={{ textAlign: 'center', mt: 2 }}>
+      <h1>Your Kitchen</h1>
+      <hr style={{ marginTop: '16px', marginBottom: '16px', border: 'none', borderTop: '2px solid #ccc' }} />
+    </Box>
 
-        </Box>
+    <Box size="large" sx={{ display: 'flex', justifyContent: 'space-between', mt: 2 }}>
+      <button id="filter">
+        <img
+          src={filterIcon}
+          alt="filter icon"
+          style={{
+            width: '16px',
+            height: '16px',
+            borderRadius: '50%',
+            border: '2px solid rgb(0, 0, 0)',
+            padding: '4px',
+            backgroundColor: 'white',
+          }}
+        />
+        Filter
+      </button>
+      <button id="generateRecipe">Generate Recipe</button>
+    </Box>
 
-      </Box>
-
-
-      
-      <ProfileButton />
-
-     
-      {/* <Box
-      id="food-list-container"
+    <Box
+      id="Recipe-list-container"
       sx={{
         backgroundColor: "#f0f0f0",
         borderRadius: 2,
@@ -56,20 +52,14 @@ const Kitchen = () => {
         height: "100%",
         overflowY: "auto",
         padding: 1,
+        mt: 2,
       }}>
-      </Box> */}
-
-    </Box>
-
-    
-    
-
-
-          
       
-    
-
-
+      {/* <p>This container fills the remaining space under the buttons.</p> */}
+    </Box>
+  </Box>
+  <ProfileButton />
+</Box>
   );
 };
 

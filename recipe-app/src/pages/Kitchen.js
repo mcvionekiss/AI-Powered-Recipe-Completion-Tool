@@ -15,10 +15,9 @@ const Kitchen = () => {
   const [items, setItems] = useState([
     { name: 'Recipe 1', description: 'A tasty dish.', type: 'Dinner' },
     { name: 'Pepperoni pizza', description: 'Pepperoni pizza is a popular pizza topped with tomato sauce, melted mozzarella cheese, and spicy, thinly sliced pepperoni.', type: 'Snack' },
-    { name: 'Recipe 3', description: 'Family favorite.', type: 'Lunch' },
-    { name: 'Recipe 4', description: 'Spicy and bold.', type: 'Dinner' },
+    { name: 'Chicken Caesar Salad', description: 'A chicken Caesar salad is a crisp romaine lettuce salad topped with grilled chicken, croutons, Parmesan cheese, and creamy Caesar dressing.', type: 'Lunch' },
+    { name: 'Japanese Chicken Curry', description: 'Japanese chicken curry is a mildly spiced, savory dish made with tender chicken, potatoes, carrots, and onions simmered in a rich, thick curry sauce served over rice.', type: 'Dinner' },
     { name: 'Recipe 5', description: 'Sweet treat.', type: 'Dessert' },
-    { name: 'Recipe 6', description: 'Light and fresh.', type: 'Salad' },
   ]);
 
   const [selectedItem, setSelectedItem] = useState(null);
@@ -59,22 +58,7 @@ const Kitchen = () => {
 
     <Box
       id="Recipe-list-container"
-      sx={{
-        backgroundColor: "#f0f0f0",
-        borderRadius: 2,
-        border: "1px solid black",
-        display: "flex",
-        flexDirection: "row",
-        flexWrap: "wrap",
-        justifyContent: "flex-start",
-        alignItems: "flex-start",
-        gap: 1,
-        width: "100%",
-        height: "100%",
-        overflowY: "auto",
-        padding: 1,
-        mt: 2,
-      }}
+      className="recipe-list-container"
     >
       {items.map((foodItem, index) => (
         <Recipe
@@ -88,6 +72,7 @@ const Kitchen = () => {
 
     {selectedItem && (
   <Box
+    className="recipe-details"
     sx={{
       position: 'absolute',
       top: '325px',
@@ -99,8 +84,8 @@ const Kitchen = () => {
       boxShadow: 3,
       zIndex: 1000,
       maxWidth: '300px', // Limit width to keep it readable
-      wordWrap: 'break-word', // Ensure long words wrap
-      whiteSpace: 'normal',   // Allow normal wrapping behavior
+      wordWrap: 'break-word', // wrap long words
+      whiteSpace: 'normal',   // allow for wrapping
     }}
   >
     <h3>{selectedItem.name}</h3>

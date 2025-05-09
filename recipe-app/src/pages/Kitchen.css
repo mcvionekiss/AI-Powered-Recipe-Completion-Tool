@@ -52,3 +52,13 @@
   padding: 8px; 
   margin-top: 16px; 
 }
+
+
+.search-input.full-width {
+  width: 100%;
+  box-sizing: border-box; /* Ensures padding doesn't overflow width */
+  padding: 12px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}

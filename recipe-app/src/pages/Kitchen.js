@@ -4,10 +4,31 @@ import ProfileButton from '../components/ProfileButton';
 import { Box } from '@mui/material';
 import filterIcon from './filter.png';
 import './Kitchen.css'; // Import the CSS file for styling
+import { Recipe } from '../components/Recipe';
+import { useState } from 'react';
+
 
 
 // kitchen page
 const Kitchen = () => {
+
+  const [items, setItems] = useState([
+    { name: 'Recipe 1', description: 'A tasty dish.', type: 'Dinner' },
+    { name: 'Pepperoni pizza', description: 'Pepperoni pizza is a popular pizza topped with tomato sauce, melted mozzarella cheese, and spicy, thinly sliced pepperoni.', type: 'Snack' },
+    { name: 'Recipe 3', description: 'Family favorite.', type: 'Lunch' },
+    { name: 'Recipe 4', description: 'Spicy and bold.', type: 'Dinner' },
+    { name: 'Recipe 5', description: 'Sweet treat.', type: 'Dessert' },
+    { name: 'Recipe 6', description: 'Light and fresh.', type: 'Salad' },
+  ]);
+
+  const [selectedItem, setSelectedItem] = useState(null);
+
+  const handleShowRecipeDetails = (recipe) => {
+    setSelectedItem(recipe);
+
+  };
+
+
   return (
     <Box sx={{ display: 'flex' }}>
   <RegularSidebar />
@@ -53,10 +74,42 @@ const Kitchen = () => {
         overflowY: "auto",
         padding: 1,
         mt: 2,
-      }}>
-      
-      {/* <p>This container fills the remaining space under the buttons.</p> */}
+      }}
+    >
+      {items.map((foodItem, index) => (
+        <Recipe
+          key={index}
+          foodItem={foodItem}
+          onClick={() => setSelectedItem(foodItem)}
+          onDelete={(item) => console.log('Delete', item)}
+        />
+      ))}
     </Box>
+
+    {selectedItem && (
+  <Box
+    sx={{
+      position: 'absolute',
+      top: '325px',
+      right: '400px',
+      backgroundColor: '#fff',
+      padding: 2,
+      border: '1px solid #ccc',
+      borderRadius: 2,
+      boxShadow: 3,
+      zIndex: 1000,
+      maxWidth: '300px', // Limit width to keep it readable
+      wordWrap: 'break-word', // Ensure long words wrap
+      whiteSpace: 'normal',   // Allow normal wrapping behavior
+    }}
+  >
+    <h3>{selectedItem.name}</h3>
+    <p><strong>Type:</strong> {selectedItem.type}</p>
+    <p>{selectedItem.description}</p>
+    <button onClick={() => setSelectedItem(null)}>Close</button>
+  </Box>
+)}
+
   </Box>
   <ProfileButton />
 </Box>

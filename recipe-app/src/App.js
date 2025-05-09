@@ -17,7 +17,6 @@ function App() {
 
         {/* SignUp & LogIn Pages */}
         <Route path="/signup" element={<SignUp />} />
-        <Route path="/login" element={<LogIn />} />
 
         {/* Functional Pages */}
         <Route path="/dashboard" element={<Dashboard />} />

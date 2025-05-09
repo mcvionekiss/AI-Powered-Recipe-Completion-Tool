@@ -5,8 +5,11 @@ import { Box } from '@mui/material';
 import filterIcon from './filter.png';
 import './Kitchen.css'; // Your custom styles
 import { Recipe } from '../components/Recipe';
+import LogIn from './LogIn';
 
 const Kitchen = () => {
+  const [loginOpen, setLoginOpen] = useState(false);
+
   const [items, setItems] = useState([
     { name: 'Recipe 1', description: 'A tasty dish.', type: 'Dinner' },
     { name: 'Pepperoni pizza', description: 'Pepperoni pizza is a popular pizza topped with tomato sauce, melted mozzarella cheese, and spicy, thinly sliced pepperoni.', type: 'Lunch' },
@@ -23,6 +26,9 @@ const Kitchen = () => {
   };
 
   return (
+    <>
+    <ProfileButton onTriggerLogin={() => setLoginOpen(true)} />
+    <LogIn open={loginOpen} onClose={() => setLoginOpen(false)} />
     <Box sx={{ display: 'flex' }}>
       <RegularSidebar />
 
@@ -106,8 +112,9 @@ const Kitchen = () => {
         )}
       </Box>
 
-      <ProfileButton />
+      <ProfileButton onTriggerLogin={() => setLoginOpen(true)} />
     </Box>
+    </>
   );
 };
 

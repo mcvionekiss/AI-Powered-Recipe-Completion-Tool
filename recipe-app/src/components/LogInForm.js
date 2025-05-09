@@ -33,7 +33,7 @@ const LogInForm = () => {
   };
 
   return (
-    <Container maxWidth="sm" sx={{ mt: 10 }}>
+    <Container maxWidth="sm" sx={{ mt: 0 }}>
       <Typography variant="h4" gutterBottom>
         Log In
       </Typography>
@@ -50,6 +50,12 @@ const LogInForm = () => {
         </Button>
         <Typography variant="body2" sx={{ mt: 2 }}>
           Demo Credentials: demo@user.com / password123
+        </Typography>
+        <Typography variant="body2" sx={{ mt: 3, textAlign: 'center' }}>
+          Don&apos;t have an account?{' '}
+          <Button variant="text" size="small" onClick={() => navigate('/signup')}>
+            Sign Up
+          </Button>
         </Typography>
       </Box>
     </Container>

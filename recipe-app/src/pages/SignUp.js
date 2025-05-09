@@ -1,12 +1,12 @@
 import React from 'react';
-import SignUpSidebar from '../components/SignUpSidebar';
+import Sidebar from '../components/RegularSidebar'
 import SignUpForm from '../components/SignUpForm';
 import { Box } from '@mui/material';
 
 const SignUp = () => {
   return (
     <Box sx={{ display: 'flex' }}>
-      <SignUpSidebar />
+      <Sidebar />
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
         <SignUpForm />
       </Box>

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { IconButton, Avatar, Menu, MenuItem } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
-const ProfileButton = () => {
+const ProfileButton = ({ onTriggerLogin }) => {
   const navigate = useNavigate();
   const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
 
@@ -13,7 +13,7 @@ const ProfileButton = () => {
     if (isLoggedIn) {
       setAnchorEl(event.currentTarget);
     } else {
-      navigate('/login');
+      onTriggerLogin();
     }
   };
 

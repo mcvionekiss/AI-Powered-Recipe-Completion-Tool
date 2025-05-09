@@ -6,7 +6,12 @@ const ProfileButton = () => {
   const navigate = useNavigate();
 
   const handleProfileClick = () => {
-    navigate('/profile');
+    const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+    if (isLoggedIn) {
+      navigate('/profile');
+    } else {
+      navigate('/login');
+    }
   };
 
   return (

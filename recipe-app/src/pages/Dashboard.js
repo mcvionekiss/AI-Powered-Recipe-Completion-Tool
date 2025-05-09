@@ -3,6 +3,7 @@ import { Box, Typography, Card, CardContent, Divider, List, ListItem, ListItemTe
 import RegularSidebar from '../components/RegularSidebar';
 import ProfileButton from '../components/ProfileButton';
 import { PieChart, Pie, Cell, Tooltip, Legend } from 'recharts'; // for the pie chart
+import TipNotification from '../components/TipNotification';
 
 const mockRecentRecipes = ['Recipe #1', 'Recipe #2', 'Recipe #3'];
 const mockLastUpdated = 'Saturday';
@@ -22,9 +23,10 @@ const Dashboard = () => {
 
       <Box component="main" sx={{ flexGrow: 1, p: 4 }}>
         {/* Top Title and Profile Button */}
+        <TipNotification />
+        <ProfileButton />
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
           <Typography variant="h4">Dashboard</Typography>
-          <ProfileButton />
         </Box>
 
         <Divider sx={{ mb: 4 }} />

@@ -9,7 +9,7 @@ import { Recipe } from '../components/Recipe';
 const Kitchen = () => {
   const [items, setItems] = useState([
     { name: 'Recipe 1', description: 'A tasty dish.', type: 'Dinner' },
-    { name: 'Pepperoni pizza', description: 'Pepperoni pizza is a popular pizza topped with tomato sauce, melted mozzarella cheese, and spicy, thinly sliced pepperoni.', type: '' },
+    { name: 'Pepperoni pizza', description: 'Pepperoni pizza is a popular pizza topped with tomato sauce, melted mozzarella cheese, and spicy, thinly sliced pepperoni.', type: 'Lunch' },
     { name: 'Chicken Caesar Salad', description: 'A chicken Caesar salad is a crisp romaine lettuce salad topped with grilled chicken, croutons, Parmesan cheese, and creamy Caesar dressing.', type: 'Lunch' },
     { name: 'Japanese Chicken Curry', description: 'Japanese chicken curry is a mildly spiced, savory dish made with tender chicken, potatoes, carrots, and onions simmered in a rich, thick curry sauce served over rice.', type: 'Dinner' },
     { name: 'Chocolate Ice Cream', description: 'Chocolate ice cream is a rich, creamy frozen dessert made with cocoa or chocolate flavoring, offering a smooth and indulgent taste.', type: 'Dessert' },

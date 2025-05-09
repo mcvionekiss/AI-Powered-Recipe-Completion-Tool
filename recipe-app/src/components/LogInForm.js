@@ -22,11 +22,8 @@ const LogInForm = () => {
         Log In
       </Typography>
       <Box component="form" onSubmit={handleSubmit}>
-        <TextField fullWidth name="firstName" label="First Name" onChange={handleChange} margin="normal" />
-        <TextField fullWidth name="lastName" label="Last Name" onChange={handleChange} margin="normal" />
         <TextField fullWidth name="email" label="Email Address" onChange={handleChange} margin="normal" />
         <TextField fullWidth name="password" type="password" label="Password" onChange={handleChange} margin="normal" />
-        <TextField fullWidth name="confirmPassword" type="password" label="Confirm Password" onChange={handleChange} margin="normal" />
         <Button type="submit" fullWidth variant="contained" sx={{ mt: 3 }}>
           Login
         </Button>

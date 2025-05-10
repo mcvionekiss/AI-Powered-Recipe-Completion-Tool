@@ -27,7 +27,7 @@ const About = () => {
         >
           {/* Header */}
           <Box sx={{ textAlign: 'center', mt: 2 }}>
-            <h1>About Us</h1>
+            <Typography variant="h4" component="h1">ABOUT US</Typography>
             <hr
               style={{
                 margin: '16px 0',
@@ -37,26 +37,53 @@ const About = () => {
             />
           </Box>
 
-          {/* Static About Content Container */}
+          {/* Two-column content */}
           <Box
             sx={{
-              width: '80%',            
-              mx: 'auto',
               flexGrow: 1,
-              border: 1,
-              borderColor: 'grey.300',
-              borderRadius: 2,
-              p: 3,
-              backgroundColor: '#f9f9f9',
-              overflow: 'auto',
+              display: 'flex',
+              gap: 2,
+              width: '80%',
+              mx: 'auto',
             }}
           >
-            <Typography variant="body1">
-          
-              Welcome to our kitchen recipe app! We’re passionate about bringing you the best home-cooked meals.
-              Explore a curated collection of recipes, from quick weeknight dinners to indulgent desserts.
-              Our mission is to make cooking simple, fun, and delicious for everyone.
-            </Typography>
+            {/* Contact Us */}
+            <Box
+              sx={{
+                flex: 1,
+                border: 1,
+                borderColor: 'grey.300',
+                borderRadius: 2,
+                p: 3,
+                backgroundColor: '#f9f9f9',
+                display: 'flex',
+                flexDirection: 'column',
+                overflow: 'auto',
+              }}
+            >
+              <Typography variant="h6" align="center">CONTACT US</Typography>
+              <Box component="hr" sx={{ borderTop: '2px solid #000', width: '50%', mx: 'auto', my: 1 }} />
+              {/* TODO: Add your contact information here */}
+            </Box>
+
+            {/* Project Details */}
+            <Box
+              sx={{
+                flex: 1,
+                border: 1,
+                borderColor: 'grey.300',
+                borderRadius: 2,
+                p: 3,
+                backgroundColor: '#f9f9f9',
+                display: 'flex',
+                flexDirection: 'column',
+                overflow: 'auto',
+              }}
+            >
+              <Typography variant="h6" align="center">PROJECT DETAILS</Typography>
+              <Box component="hr" sx={{ borderTop: '2px solid #000', width: '50%', mx: 'auto', my: 1 }} />
+              {/* TODO: Add your project details here */}
+            </Box>
           </Box>
         </Box>
 

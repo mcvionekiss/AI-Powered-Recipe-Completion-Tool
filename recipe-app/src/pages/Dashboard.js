@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Box, Typography, Card, CardContent, Divider, List, ListItem, ListItemText } from '@mui/material';
 import RegularSidebar from '../components/RegularSidebar';
 import ProfileButton from '../components/ProfileButton';
 import { PieChart, Pie, Cell, Tooltip, Legend } from 'recharts'; // for the pie chart
 import TipNotification from '../components/TipNotification';
+import LogIn from '../pages/LogIn';
 
 const mockRecentRecipes = ['Recipe #1', 'Recipe #2', 'Recipe #3'];
 const mockLastUpdated = 'Saturday';
@@ -17,14 +18,19 @@ const mockFoodRatios = [
 const COLORS = ['#8e44ad', '#c0392b', '#5dade2'];
 
 const Dashboard = () => {
+  const [loginOpen, setLoginOpen] = useState(false);
+  
   return (
+    <>
+    <ProfileButton onTriggerLogin={() => setLoginOpen(true)} />
+    <LogIn open={loginOpen} onClose={() => setLoginOpen(false)} />
     <Box sx={{ display: 'flex' }}>
       <RegularSidebar />
 
       <Box component="main" sx={{ flexGrow: 1, p: 4 }}>
         {/* Top Title and Profile Button */}
         <TipNotification />
-        <ProfileButton />
+        <ProfileButton onTriggerLogin={() => setLoginOpen(true)} />
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
           <Typography variant="h4">Dashboard</Typography>
         </Box>
@@ -104,6 +110,7 @@ const Dashboard = () => {
         </Box>
       </Box>
     </Box>
+    </>
   );
 };
 

@@ -13,11 +13,10 @@ function App() {
     <Router>
       <Routes>
         {/* Landing Page */}
-        <Route path="/" element={<LogIn />} />  
+        <Route path="/" element={<Dashboard />} />  
 
         {/* SignUp & LogIn Pages */}
         <Route path="/signup" element={<SignUp />} />
-        <Route path="/login" element={<LogIn />} />
 
         {/* Functional Pages */}
         <Route path="/dashboard" element={<Dashboard />} />

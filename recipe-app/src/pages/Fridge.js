@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from 'react';
 import RegularSidebar from "../components/RegularSidebar";
 import ProfileButton from "../components/ProfileButton";
 import { Box, TextField } from "@mui/material";
@@ -6,11 +6,12 @@ import { IconButton } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import Icon from "@mdi/react";
 import { mdiFridge } from "@mdi/js";
-import { useState } from "react";
 import { FoodItem } from "../components/foodItem"; // Adjust the import path as necessary
 import FoodItemInfo from "../components/FoodItemInfo"; // Adjust the import path as necessary
+import LogIn from './LogIn';
 
 const Fridge = () => {
+  const [loginOpen, setLoginOpen] = useState(false);
   const [foodItems, setFoodItems] = useState([
     { name: "Food Item 1", quantity: "3" },
     { name: "Food Item 2", quantity: "1" },
@@ -54,6 +55,9 @@ const Fridge = () => {
   };
 
   return (
+    <>
+    <ProfileButton onTriggerLogin={() => setLoginOpen(true)} />
+    <LogIn open={loginOpen} onClose={() => setLoginOpen(false)} />
     <Box sx={{ display: "flex", height: "100vh" }}>
       <RegularSidebar />
 
@@ -163,8 +167,9 @@ const Fridge = () => {
         </Box>
       </Box>
 
-      <ProfileButton />
+      <ProfileButton onTriggerLogin={() => setLoginOpen(true)} />
     </Box>
+    </>
   );
 };
 

@@ -1,24 +1,30 @@
 const express = require("express");
+const axios = require("axios");
+
 // create router
 const router = express.Router();
 // This is an example of a GET request handler
 // Parameter 1 -> if retrieving all, then we use / | if retrieving a specific dataset, then we use /:id
 // Parameter 2 -> an asynchronous function taking in the request and response objects
-router.get("/", async (req, res) => {});
-
-router.post("/", async (req, res) => {
-  // Parses the request object which is in a JSON format.
-  // Each variable after const represents a key from the request body
-  // The request object derives from our Model
-  const { title, load, reps } = req.body;
-
+router.get("/search", async (req, res) => {
+  const { search_query } = req.query;
+  console.log("Search query:", search_query);
   try {
-    // Creating a new workout object based on a WorkoutModel
-    const workout = await WorkoutModel.create({ title, load, reps });
-    // if response is 200 (OK) → then we can send the contents of our new workout object to indicate that it has been successfully added
-    res.status(200).json(workout);
+    const response = await axios.get(
+      `https://api.nal.usda.gov/fdc/v1/foods/search`,
+      {
+        params: {
+          query: search_query,
+          api_key: process.env.NUTRITION_API_KEY,
+        },
+      }
+    );
+    const results = response.data.foods;
+    console.log("Fetched food items in backend:", results);
+    res.json(results);
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    console.error("Error fetching food items:", error);
+    res.status(500).json({ error: "Failed to fetch food items" });
   }
 });
 

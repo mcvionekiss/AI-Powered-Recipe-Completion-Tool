@@ -54,7 +54,7 @@ const Fridge = () => {
     console.log("Fetching food options for query:", query);
     try {
       const response = await axios.get(
-        "http://localhost:4000/ingredients/search",
+        `${process.env.REACT_APP_BASE_API_URL}/ingredients/search`,
         {
           params: {
             search_query: query,

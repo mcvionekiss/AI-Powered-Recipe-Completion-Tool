@@ -164,4 +164,3 @@ useEffect(() => {
 
 
 export default Kitchen;
-

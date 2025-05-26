@@ -1,7 +1,6 @@
 require("dotenv").config();
 
 const express = require("express");
-const mongoose = require("mongoose");
 const cors = require("cors");
 
 // create express app
@@ -11,8 +10,12 @@ app.use(
     origin: "http://localhost:3000", // allow requests from this domain
   })
 );
+app.listen(process.env.EXPRESS_PORT, () => {
+  console.log("Server is listening on port", process.env.EXPRESS_PORT);
+});
 
 const ingredients_route = require("./routes/ingredientsService.js");
+const user_route = require("./routes/userService.js");
 
 // middleware that will trigger for every request that comes in\
 app.use(express.json()); // if any requests come in, parse json data from request body and attach to request object
@@ -23,21 +26,4 @@ app.use((req, res, next) => {
 
 // routes
 app.use("/ingredients", ingredients_route); // route for ingredients service
-
-// connect to mongodb
-mongoose
-  .connect(process.env.MONGO_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
-  .then(() => {
-    console.log("Connected to MongoDB"); // sanity check
-
-    // listen for requests once we have connected to the database
-    app.listen(process.env.PORT, () => {
-      console.log("Server is listening on port", process.env.PORT);
-    });
-  })
-  .catch((error) => {
-    console.log(error);
-  });
+app.use("/users", user_route); // route for user service

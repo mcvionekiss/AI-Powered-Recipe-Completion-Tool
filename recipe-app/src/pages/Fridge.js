@@ -17,37 +17,15 @@ import LogIn from "./LogIn";
 
 const Fridge = () => {
   const [loginOpen, setLoginOpen] = useState(false);
-  const [foodItems, setFoodItems] = useState([
-    { name: "Food Item 1", quantity: "3" },
-    { name: "Food Item 2", quantity: "1" },
-    { name: "Food Item 3", quantity: "10" },
-    { name: "Food Item 4", quantity: "10" },
-    { name: "Food Item 5", quantity: "10" },
-    { name: "Food Item 6", quantity: "10" },
-    { name: "Food Item 7", quantity: "10" },
-  ]);
+  const [foodItems, setFoodItems] = useState([]);
+
   const [inputValue, setInputValue] = useState("");
   const currentInputValue = useRef(inputValue);
   const [foodOptions, setfoodOptions] = useState([]);
-
-  // const foodOptions = [
-  //   "apple",
-  //   "orange",
-  //   "rice",
-  //   "watermelon",
-  //   "banana",
-  //   "grape",
-  //   "kiwi",
-  //   "mango",
-  //   "peach",
-  //   "pear",
-  //   "pineapple",
-  //   "strawberry",
-  //   "tomato",
-  //   "watermelon",
-  // ];
-
   const [selectedFoodItem, setSelectedFoodItem] = useState(null);
+
+  const [viewFoodItemDetails, setViewFoodItemDetails] = useState(false);
+  const [selectedFoodItemDetails, setSelectedFoodItemDetails] = useState({});
 
   // Debounced function to fetch food options every 300ms (after input is changed)
   const handleFetchFoodOptions = debounce(async (query) => {
@@ -64,7 +42,18 @@ const Fridge = () => {
 
       const results = response.data;
       console.log("Fetched food options:", results);
-      setfoodOptions(results.map((item) => item.description));
+      // Remove duplicates by description + brandOwner
+      const uniqueOptions = [];
+      const seen = new Set();
+      results.forEach((item) => {
+        const key =
+          item.description + (item.brandOwner ? " | " + item.brandOwner : "");
+        if (!seen.has(key)) {
+          seen.add(key);
+          uniqueOptions.push(item);
+        }
+      });
+      setfoodOptions(uniqueOptions);
     } catch (error) {
       console.error("Error fetching food options:", error);
     }
@@ -110,7 +99,8 @@ const Fridge = () => {
   const handleShowFoodItemDetails = (foodItem) => {
     // Handle showing food item details here
     console.log("Showing details for:", foodItem);
-    setSelectedFoodItem(foodItem);
+    setViewFoodItemDetails(true);
+    setSelectedFoodItemDetails(foodItem);
   };
 
   return (
@@ -145,6 +135,20 @@ const Fridge = () => {
             <Autocomplete
               disablePortal
               options={foodOptions}
+              getOptionLabel={(opt) =>
+                opt.brandOwner
+                  ? `${opt.description} | ${opt.brandOwner}`
+                  : opt.description
+              }
+              isOptionEqualToValue={(opt, val) =>
+                // optional but recommended: compare by a unique ID
+                opt.fdcId === val.fdcId
+              }
+              value={selectedFoodItem}
+              onChange={(_, newValue) => {
+                console.log("picked object:", newValue);
+                setSelectedFoodItem(newValue);
+              }}
               onInputChange={(event, value) => {
                 // Handle input change here
                 console.log("Input changed:", value);
@@ -157,7 +161,14 @@ const Fridge = () => {
             />
             <IconButton
               onClick={() =>
-                handleAddFoodItem({ name: "New Food", quantity: "1" })
+                handleAddFoodItem({
+                  name: selectedFoodItem.description,
+                  fdcId: selectedFoodItem.fdcId,
+                  foodCategory: selectedFoodItem.foodCategory,
+                  brandOwner: selectedFoodItem.brandOwner,
+                  nutrition: selectedFoodItem.foodNutrients,
+                  quantity: "1",
+                })
               }
               sx={{
                 backgroundColor: "primary.main",
@@ -222,10 +233,10 @@ const Fridge = () => {
                   onDelete={handleDeleteFoodItem}
                 />
               ))}
-              {selectedFoodItem && (
+              {viewFoodItemDetails && (
                 <FoodItemInfo
-                  foodItem={selectedFoodItem}
-                  onClose={() => setSelectedFoodItem(null)}
+                  foodItem={selectedFoodItemDetails}
+                  onClose={() => setViewFoodItemDetails(false)}
                 />
               )}
             </Box>

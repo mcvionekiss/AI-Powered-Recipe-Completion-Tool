@@ -12,11 +12,15 @@ export function FoodItem({ foodItem, onClick, onDelete }) {
       onMouseLeave={() => setIsHovered(false)}
       sx={{
         borderRadius: 2,
-        border: "1px solid #ccc",
+        border: isHovered ? "2px solid lightgrey" : "2px solid black",
         width: "200px",
-        padding: 2,
+        padding: 3,
         cursor: "pointer",
         position: "relative",
+        backgroundColor: isHovered ? "grey" : "",
+        color: isHovered ? "white" : "black",
+        transition: "background-color 0.3s, box-shadow 0.5s, border 0.3s",
+        boxShadow: isHovered ? "0 2px 4px rgba(0, 0, 0, 0.1)" : "none",
       }}>
       <Box
         sx={{
@@ -35,8 +39,8 @@ export function FoodItem({ foodItem, onClick, onDelete }) {
           }}
           sx={{
             position: "absolute",
-            top: 4,
-            right: 4,
+            top: 5,
+            right: 3,
           }}>
           <CloseIcon fontSize="small" />
         </IconButton>

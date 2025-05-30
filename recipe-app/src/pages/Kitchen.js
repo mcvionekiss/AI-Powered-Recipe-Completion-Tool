@@ -6,6 +6,8 @@ import filterIcon from './filter.png';
 import './Kitchen.css'; // Your custom styles
 import { Recipe } from '../components/Recipe';
 import LogIn from './LogIn';
+import axios from 'axios';
+
 
 
 
@@ -20,27 +22,27 @@ const Kitchen = () => {
  const [loginOpen, setLoginOpen] = useState(false);
 
 
- async function fetchData() {
-   const apiKey = '';
-   const query = 'pizza';
-   // checks values from json, NOT the keys
-   const url = `https://api.nal.usda.gov/fdc/v1/foods/search?query=${query}&api_key=${apiKey}`;
+//  async function fetchData() {
+//    const apiKey = '';
+//    const query = 'pizza';
+//    // checks values from json, NOT the keys
+//    const url = `https://api.nal.usda.gov/fdc/v1/foods/search?query=${query}&api_key=${apiKey}`;
 
 
-   fetch(url)
-     .then(response => response.json())
-     .then(data => console.log(data))
-     .catch(err => console.error('Error:', err));
-}
-
-
-
+//    fetch(url)
+//      .then(response => response.json())
+//      .then(data => console.log(data))
+//      .catch(err => console.error('Error:', err));
+// }
 
 
 
-useEffect(() => {
- console.log(fetchData(), []);
-})
+
+
+
+// useEffect(() => {
+//  console.log(fetchData(), []);
+// })
 
 
 
@@ -62,6 +64,17 @@ useEffect(() => {
    setSelectedItem(recipe);
  };
 
+
+ const handleGenerateRecipe = async (query) => {
+  try{
+    await axios.get(
+        `${process.env.REACT_APP_BASE_API_URL}/recipe/generate`,
+        {search_query: query}
+      );
+    }catch(error){
+      console.error("Error generating recipe:", error);
+    }
+ }
 
  return (
    <>
@@ -109,7 +122,7 @@ useEffect(() => {
            />
            Filter
          </button>
-         <button id="generateRecipe">Generate Recipe</button>
+         <button id="generateRecipe" onClick={()=>handleGenerateRecipe(searchText)}>Generate Recipe</button>
        </Box>
 
 

@@ -22,22 +22,6 @@ const Kitchen = () => {
  const [loginOpen, setLoginOpen] = useState(false);
 
 
-//  async function fetchData() {
-//    const apiKey = '';
-//    const query = 'pizza';
-//    // checks values from json, NOT the keys
-//    const url = `https://api.nal.usda.gov/fdc/v1/foods/search?query=${query}&api_key=${apiKey}`;
-
-
-//    fetch(url)
-//      .then(response => response.json())
-//      .then(data => console.log(data))
-//      .catch(err => console.error('Error:', err));
-// }
-
-
-
-
 
 
 // useEffect(() => {
@@ -45,15 +29,7 @@ const Kitchen = () => {
 // })
 
 
-
-
- const [items, setItems] = useState([
-   { name: 'Recipe 1', description: 'A tasty dish.', type: 'Dinner' },
-   { name: 'Pepperoni pizza', description: 'Pepperoni pizza is a popular pizza topped with tomato sauce, melted mozzarella cheese, and spicy, thinly sliced pepperoni.', type: 'Lunch' },
-   { name: 'Chicken Caesar Salad', description: 'A chicken Caesar salad is a crisp romaine lettuce salad topped with grilled chicken, croutons, Parmesan cheese, and creamy Caesar dressing.', type: 'Lunch' },
-   { name: 'Japanese Chicken Curry', description: 'Japanese chicken curry is a mildly spiced, savory dish made with tender chicken, potatoes, carrots, and onions simmered in a rich, thick curry sauce served over rice.', type: 'Dinner' },
-   { name: 'Chocolate Ice Cream', description: 'Chocolate ice cream is a rich, creamy frozen dessert made with cocoa or chocolate flavoring, offering a smooth and indulgent taste.', type: 'Dessert' },
- ]);
+ const [items, setItems] = useState([]);
 
 
  const [selectedItem, setSelectedItem] = useState(null);
@@ -64,17 +40,39 @@ const Kitchen = () => {
    setSelectedItem(recipe);
  };
 
+ function addItem(recipe) {
+  setItems(items => [
+    ...items,
+    {
+      name: recipe.name,
+      description: recipe.description,
+      instructions: recipe.instructions,
+    },
+  ]);
+  console.log("items:", items);
+}
+ 
 
  const handleGenerateRecipe = async (query) => {
   try{
-    await axios.get(
+    console.log("query:", query);
+    const new_recipe = await axios.get(
         `${process.env.REACT_APP_BASE_API_URL}/recipe/generate`,
-        {search_query: query}
+        {params: {
+          cheese: '1',
+          dough: '1',
+          tomato_sauce: '0.5'
+        }
+      }
       );
+      const parsedRecipe = JSON.parse(new_recipe.data.recipe);
+      addItem(parsedRecipe);
     }catch(error){
       console.error("Error generating recipe:", error);
     }
  }
+
+
 
  return (
    <>
@@ -122,7 +120,7 @@ const Kitchen = () => {
            />
            Filter
          </button>
-         <button id="generateRecipe" onClick={()=>handleGenerateRecipe(searchText)}>Generate Recipe</button>
+         <button id="generateRecipe" onClick={()=>handleGenerateRecipe("potato")}>Generate Recipe</button>
        </Box>
 
 
@@ -161,8 +159,8 @@ const Kitchen = () => {
            }}
          >
            <h3>{selectedItem.name}</h3>
-           <p><strong>Type:</strong> {selectedItem.type}</p>
-           <p>{selectedItem.description}</p>
+           <p><strong>Description:</strong> {selectedItem.description}</p>
+           <p>{selectedItem.instructions}</p>
            <button onClick={() => setSelectedItem(null)}>Close</button>
          </Box>
        )}

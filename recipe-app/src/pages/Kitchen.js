@@ -49,13 +49,13 @@ const Kitchen = () => {
       instructions: recipe.instructions,
     },
   ]);
-  console.log("items:", items);
+  // console.log("items:", items);
 }
  
 
  const handleGenerateRecipe = async (query) => {
   try{
-    console.log("query:", query);
+    // console.log("query:", query);
     const new_recipe = await axios.get(
         `${process.env.REACT_APP_BASE_API_URL}/recipe/generate`,
         {params: {
@@ -67,6 +67,7 @@ const Kitchen = () => {
       );
       const parsedRecipe = JSON.parse(new_recipe.data.recipe);
       addItem(parsedRecipe);
+      console.log("recipe:", parsedRecipe);
     }catch(error){
       console.error("Error generating recipe:", error);
     }
@@ -159,7 +160,7 @@ const Kitchen = () => {
            }}
          >
            <h3>{selectedItem.name}</h3>
-           <p><strong>Description:</strong> {selectedItem.description}</p>
+           <p><strong>Description: </strong> {selectedItem.description}</p>
            <p><strong>Instructions: </strong>{selectedItem.instructions}</p>
            <button onClick={() => setSelectedItem(null)}>Close</button>
          </Box>

@@ -160,7 +160,7 @@ const Kitchen = () => {
          >
            <h3>{selectedItem.name}</h3>
            <p><strong>Description:</strong> {selectedItem.description}</p>
-           <p>{selectedItem.instructions}</p>
+           <p><strong>Instructions: </strong>{selectedItem.instructions}</p>
            <button onClick={() => setSelectedItem(null)}>Close</button>
          </Box>
        )}

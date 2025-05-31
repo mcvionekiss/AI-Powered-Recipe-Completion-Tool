@@ -14,4 +14,18 @@ router.get("/all", async (req, res) => {
   }
 });
 
+
+router.get("/ingredients", async (req, res) => {
+  try{
+    console.log("inside ingredients route");
+    const [ingredients] = await db.query("SELECT * FROM ingredient WHERE userid = ?", [4]);
+    console.log("Fetched ingredients:", ingredients);
+  }catch(error){
+    console.log("Error fetching ingredients:", error);
+  }
+
+
+});
+
+
 module.exports = router;

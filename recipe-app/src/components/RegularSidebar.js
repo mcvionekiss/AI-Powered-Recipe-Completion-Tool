@@ -1,6 +1,16 @@
 import React from 'react';
 import { Drawer, Box, Typography, List, ListItem } from '@mui/material';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
+
+const handleDisplayUserIngredients = async () => {
+  console.log("inside handleDisplayUserIngredients");
+  const new_recipe = await axios.get(
+    `${process.env.REACT_APP_BASE_API_URL}/users/ingredients`,
+  );
+};
+
+
 
 const Sidebar = () => {
   return (
@@ -30,8 +40,8 @@ const Sidebar = () => {
 
       {/* Navigation List */}
       <List sx={{ mt: 2 }}>
-        <ListItem button component={Link} to="/dashboard" sx={{ justifyContent: 'center' }}>
-          <Typography color="primary">Dashboard</Typography>
+        <ListItem button component={Link} to="/dashboard" onClick={() => handleDisplayUserIngredients()} sx={{ justifyContent: 'center' }}>
+          <Typography color="primary" onClick={() => handleDisplayUserIngredients()}>Dashboard</Typography>
         </ListItem>
         <ListItem button component={Link} to="/fridge" sx={{ justifyContent: 'center' }}>
           <Typography color="primary">Fridge</Typography>

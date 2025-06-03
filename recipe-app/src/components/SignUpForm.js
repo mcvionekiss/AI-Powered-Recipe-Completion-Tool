@@ -16,9 +16,37 @@ const SignUpForm = () => {
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Submitted:", formData);
+    const { firstName, lastName, email, password, confirmPassword } = formData;
+
+    if (!firstName || !lastName || !email || !password) {
+      alert("Please fill in all required fields.");
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      alert("Passwords do not match.");
+      return;
+    }
+
+    try {
+      const response = await axios.post(
+        `${process.env.REACT_APP_BASE_API_URL}/users`,
+        {
+          firstName,
+          lastName,
+          email,
+          password,
+          dietaryPreferences: "None" // optional: adjust as needed
+        }
+      );
+      console.log("User created:", response.data);
+      alert("User created successfully!");
+    } catch (error) {
+      console.error("Error creating user:", error);
+      alert("Failed to create user.");
+    }
   };
 
   // Note that this is for testing purposes only, seeing if the server is running and we are connected

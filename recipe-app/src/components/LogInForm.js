@@ -1,3 +1,4 @@
+import axios from 'axios';
 import React, { useState } from 'react';
 import { Box, Container, Typography, TextField, Button, Alert } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
@@ -11,24 +12,28 @@ const LogInForm = () => {
 
   const [error, setError] = useState('');
 
-  const MOCK_EMAIL = 'demo@user.com';
-  const MOCK_PASSWORD = 'password123';
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const { email, password } = formData;
 
-    if (email === MOCK_EMAIL && password === MOCK_PASSWORD) {
-      localStorage.setItem('isLoggedIn', 'true');
-      localStorage.setItem('userEmail', email);
-      navigate('/profile');
-    } else {
-      setError('Invalid email or password. Try demo@user.com / password123.');
+    try {
+      const res = await axios.post(`${process.env.REACT_APP_BASE_API_URL}/users/login`, { email, password });
+      if (res.data.success) {
+        localStorage.setItem('isLoggedIn', 'true');
+        localStorage.setItem('userEmail', email);
+        navigate('/profile');
+      } else {
+        setError(res.data.message || 'Invalid login');
+      }
+    } catch (err) {
+      setError('Login failed. Please try again.');
+      console.error('Login error:', err);
     }
   };
 
@@ -48,9 +53,6 @@ const LogInForm = () => {
         <Button type="submit" fullWidth variant="contained" sx={{ mt: 3 }}>
           Login
         </Button>
-        <Typography variant="body2" sx={{ mt: 2 }}>
-          Demo Credentials: demo@user.com / password123
-        </Typography>
         <Typography variant="body2" sx={{ mt: 3, textAlign: 'center' }}>
           Don&apos;t have an account?{' '}
           <Button variant="text" size="small" onClick={() => navigate('/signup')}>

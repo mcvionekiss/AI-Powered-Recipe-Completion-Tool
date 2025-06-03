@@ -26,6 +26,7 @@ const LogInForm = () => {
       const res = await axios.post(`${process.env.REACT_APP_BASE_API_URL}/users/login`, { email, password });
       if (res.data.success) {
         localStorage.setItem('isLoggedIn', 'true');
+        localStorage.setItem("userId", res.data.user.id);
         localStorage.setItem('userEmail', email);
         navigate('/profile');
       } else {

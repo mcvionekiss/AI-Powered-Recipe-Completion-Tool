@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Box, IconButton } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 
-export function FoodItem({ foodItem, onClick, onDelete }) {
+export function FoodItem({ foodItem, onClick, onDelete, quantity }) {
   const [isHovered, setIsHovered] = useState(false);
 
   return (
@@ -25,10 +25,25 @@ export function FoodItem({ foodItem, onClick, onDelete }) {
       <Box
         sx={{
           display: "flex",
-          justifyContent: "space-between",
           alignItems: "center",
+          justifyContent: "space-between",
+          width: "100%"
         }}>
-        <Box sx={{ fontWeight: "bold" }}>{foodItem.name}</Box>{" "}
+        <Box sx={{ fontWeight: "bold" }}>{foodItem.name}</Box>
+        <Box sx={{
+          backgroundColor: "white",
+          color: "black",
+          borderRadius: "50%",
+          width: "28px",
+          height: "28px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          fontSize: "0.8rem",
+          fontWeight: "bold"
+        }}>
+          {Math.floor(foodItem.quantity)}
+        </Box>
       </Box>
 
       {isHovered && (

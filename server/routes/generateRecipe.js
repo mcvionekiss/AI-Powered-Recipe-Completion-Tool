@@ -12,7 +12,7 @@ router.get("/generate", async (req, res) => {
     try {
       console.log("Received request to generate recipe");
       const ingredients = req.query;
-      
+      // console.log("Ingredients received:", ingredients);
       const parsedIngredients = Object.fromEntries(
         Object.entries(ingredients).map(([key, value]) => [key, parseFloat(value)])
       );

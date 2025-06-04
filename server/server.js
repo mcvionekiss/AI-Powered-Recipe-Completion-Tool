@@ -27,3 +27,5 @@ app.use((req, res, next) => {
 // routes
 app.use("/ingredients", ingredients_route); // route for ingredients service
 app.use("/users", user_route); // route for user service
+app.use('/recipes', require('./routes/recipesService'));
+app.use('/recipeIngredients', require('./routes/recipeIngredientsService'));

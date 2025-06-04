@@ -20,7 +20,6 @@ const COLORS = ['#8e44ad', '#c0392b', '#5dade2'];
 const Dashboard = () => {
   const [loginOpen, setLoginOpen] = useState(false);
   
-  
   return (
     <>
     <ProfileButton onTriggerLogin={() => setLoginOpen(true)} />

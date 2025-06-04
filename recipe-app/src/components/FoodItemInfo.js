@@ -22,13 +22,24 @@ export default function FoodItemInfo({ foodItem, onClose }) {
       <h3>Food Category: {foodItem.foodCategory}</h3>
       <h4>Nutrition:</h4>
       <div>
-        {foodItem.nutrition.map((nutrient, index) => (
-          <div key={index} style={{ marginBottom: "10px" }}>
-            <strong>{nutrient.nutrientName}:</strong> {nutrient.value}{" "}
-            {nutrient.unitName}
-            {nutrient.unit}
-          </div>
-        ))}
+        {(() => {
+          let nutrients = [];
+          try {
+            nutrients = typeof foodItem.description === "string"
+              ? JSON.parse(foodItem.description)
+              : Array.isArray(foodItem.description)
+                ? foodItem.description
+                : [];
+          } catch (e) {
+            nutrients = [];
+          }
+          return nutrients.map((nutrient, index) => (
+            <div key={index} style={{ marginBottom: "10px" }}>
+              <strong>{nutrient.nutrientName}:</strong> {nutrient.value} {nutrient.unitName}
+              {nutrient.unit}
+            </div>
+          ));
+        })()}
       </div>
       <Button
         onClick={onClose}

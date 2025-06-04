@@ -16,6 +16,7 @@ import FoodItemInfo from "../components/FoodItemInfo"; // Adjust the import path
 import LogIn from "./LogIn";
 
 const Fridge = () => {
+  const userId = localStorage.getItem("userId");
   const [loginOpen, setLoginOpen] = useState(false);
   const [foodItems, setFoodItems] = useState([]);
 
@@ -26,6 +27,8 @@ const Fridge = () => {
 
   const [viewFoodItemDetails, setViewFoodItemDetails] = useState(false);
   const [selectedFoodItemDetails, setSelectedFoodItemDetails] = useState({});
+
+  const [fridgeUpdateTrigger, setFridgeUpdateTrigger] = useState(0);
 
   // Debounced function to fetch food options every 300ms (after input is changed)
   const handleFetchFoodOptions = debounce(async (query) => {
@@ -72,7 +75,32 @@ const Fridge = () => {
     };
   }, [inputValue, handleFetchFoodOptions]);
 
-  const handleAddFoodItem = (newFoodItem) => {
+  useEffect(() => {
+    const fetchFridgeItems = async () => {
+      if (userId) {
+        try {
+          const response = await axios.get(`${process.env.REACT_APP_BASE_API_URL}/ingredients`, {
+            params: { userId },
+          });
+          setFoodItems(response.data);  // ⬅️ stores fetched ingredients in state
+        } catch (error) {
+          console.error("Error loading fridge from DB:", error);
+        }
+      } else {
+        const storedItems = localStorage.getItem("fridgeItems");
+        if (storedItems) {
+          setFoodItems(JSON.parse(storedItems));
+        }
+      }
+    };
+
+    fetchFridgeItems();
+    return () => {
+      handleFetchFoodOptions.cancel();
+    };
+  }, [fridgeUpdateTrigger]);
+
+  const handleAddFoodItem = async (newFoodItem) => {
     for (let i = 0; i < foodItems.length; i++) {
       if (foodItems[i].name === newFoodItem.name) {
         // If the food item already exists, update its quantity
@@ -81,19 +109,55 @@ const Fridge = () => {
           parseInt(updatedFoodItems[i].quantity) +
           parseInt(newFoodItem.quantity);
         setFoodItems(updatedFoodItems);
+        if (!userId) localStorage.setItem("fridgeItems", JSON.stringify(updatedFoodItems));
         return;
       }
     }
-    // Add the new food item to the list
-    setFoodItems((prevItems) => [...prevItems, newFoodItem]);
+
+    // Add the new food item to database or localStorage
+    if (userId) {
+      console.log("trying to insert ", newFoodItem, userId, newFoodItem.description);
+      try {
+        const response = await axios.post(`${process.env.REACT_APP_BASE_API_URL}/ingredients`, {
+          ...newFoodItem,
+          userId,
+          unit: "count",
+          description: newFoodItem.foodNutrients ? JSON.stringify(newFoodItem.foodNutrients) : "",
+        });
+        setFoodItems((prevItems) => [...prevItems, { ...newFoodItem, id: response.data.id }]);
+        setFridgeUpdateTrigger(prev => prev + 1);
+      } catch (error) {
+        console.error("Error adding food to DB:", error);
+      }
+    } else {
+      const updatedItems = [...foodItems, newFoodItem];
+      setFoodItems(updatedItems);
+      localStorage.setItem("fridgeItems", JSON.stringify(updatedItems));
+      setFridgeUpdateTrigger(prev => prev + 1);
+    }
   };
 
-  const handleDeleteFoodItem = (foodItemToDelete) => {
+  const handleDeleteFoodItem = async (foodItemToDelete) => {
     // Filter out the food item to delete
     const updatedFoodItems = foodItems.filter(
       (foodItem) => foodItem.name !== foodItemToDelete.name
     );
-    setFoodItems(updatedFoodItems);
+    
+    if (userId) {
+      try {
+        await axios.delete(`${process.env.REACT_APP_BASE_API_URL}/ingredients/${foodItemToDelete.id}`, {
+          params: { userId },
+        });
+        setFoodItems(updatedFoodItems);
+        setFridgeUpdateTrigger(prev => prev + 1);
+      } catch (error) {
+        console.error("Error deleting food from DB:", error);
+      }
+    } else {
+      setFoodItems(updatedFoodItems);
+      localStorage.setItem("fridgeItems", JSON.stringify(updatedFoodItems));
+      setFridgeUpdateTrigger(prev => prev + 1);
+    }
   };
 
   const handleShowFoodItemDetails = (foodItem) => {
@@ -163,10 +227,10 @@ const Fridge = () => {
               onClick={() =>
                 handleAddFoodItem({
                   name: selectedFoodItem.description,
-                  fdcId: selectedFoodItem.fdcId,
-                  foodCategory: selectedFoodItem.foodCategory,
-                  brandOwner: selectedFoodItem.brandOwner,
-                  nutrition: selectedFoodItem.foodNutrients,
+                  fdcId: selectedFoodItem.fdcId ?? null,
+                  foodCategory: selectedFoodItem.foodCategory ?? null,
+                  brandOwner: selectedFoodItem.brandOwner ?? null,
+                  foodNutrients: selectedFoodItem.foodNutrients ?? "no foodNutrients",
                   quantity: "1",
                 })
               }

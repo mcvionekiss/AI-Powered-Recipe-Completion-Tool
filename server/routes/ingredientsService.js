@@ -31,7 +31,8 @@ router.get("/search", async (req, res) => {
 
 // CREATE an ingredient
 router.post("/", async (req, res) => {
-  const { name, quantity, unit, description, userId } = req.body;
+  const { name, quantity, unit, foodNutrients, userId } = req.body;
+  const description = foodNutrients ? JSON.stringify(foodNutrients) : null;
   try {
     const [result] = await db.execute(
       `INSERT INTO ingredient (name, quantity, unit, description, userId, createdAt, updatedAt)
@@ -78,7 +79,8 @@ router.get("/:id", async (req, res) => {
 
 // UPDATE an ingredient by ID and userId
 router.put("/:id", async (req, res) => {
-  const { name, quantity, unit, description, userId } = req.body;
+  const { name, quantity, unit, foodNutrients, userId } = req.body;
+  const description = foodNutrients ? JSON.stringify(foodNutrients) : null;
   try {
     const [result] = await db.execute(
       `UPDATE ingredient SET name = ?, quantity = ?, unit = ?, description = ?, updatedAt = CURRENT_TIMESTAMP

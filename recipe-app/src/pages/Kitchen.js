@@ -58,12 +58,14 @@ const Kitchen = () => {
     // console.log("query:", query);
     const new_recipe = await axios.get(
         `${process.env.REACT_APP_BASE_API_URL}/recipe/generate`,
-        {params: {
-          cheese: '1',
-          dough: '1',
-          tomato_sauce: '0.5'
+        {
+          params: {
+            cheese: '1',
+            dough: '1',
+            tomato_sauce: '0.5'
+          },
+          withCredentials: true
         }
-      }
       );
       const parsedRecipe = JSON.parse(new_recipe.data.recipe);
       addItem(parsedRecipe);

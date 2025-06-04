@@ -39,6 +39,9 @@ const SignUpForm = () => {
           email,
           password,
           dietaryPreferences: "None" // optional: adjust as needed
+        },
+        {
+          withCredentials: true,
         }
       );
       console.log("User created:", response.data);

@@ -1,14 +1,32 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import SignUp from './pages/SignUp';
-import LogIn from './pages/LogIn';
 import Dashboard from './pages/Dashboard';
 import Fridge from './pages/Fridge';
 import Kitchen from './pages/Kitchen';
 import History from './pages/Histroy';
 import About from './pages/About';
 import Profile from './pages/Profile';
+import React, { useEffect } from 'react';
+import axios from 'axios';
 
 function App() {
+  useEffect(() => {
+    const fetchProfile = async () => {
+      try {
+        const res = await axios.get(`${process.env.REACT_APP_BASE_API_URL}/users/profile`, {
+          withCredentials: true,
+        });
+        const userId = res.data.id;
+        console.log("User profile loaded:", res.data);
+        localStorage.setItem("userId", userId);
+      } catch (err) {
+        console.error("User is not logged in:", err);
+      }
+    };
+
+    fetchProfile();
+  }, []);
+
   return (
     <Router>
       <Routes>

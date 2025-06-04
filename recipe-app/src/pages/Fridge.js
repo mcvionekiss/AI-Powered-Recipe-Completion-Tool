@@ -16,7 +16,7 @@ import FoodItemInfo from "../components/FoodItemInfo"; // Adjust the import path
 import LogIn from "./LogIn";
 
 const Fridge = () => {
-  const userId = localStorage.getItem("userId");
+  const [userId, setUserId] = useState(null);
   const [loginOpen, setLoginOpen] = useState(false);
   const [foodItems, setFoodItems] = useState([]);
 
@@ -30,6 +30,22 @@ const Fridge = () => {
 
   const [fridgeUpdateTrigger, setFridgeUpdateTrigger] = useState(0);
 
+  useEffect(() => {
+  const fetchUserId = async () => {
+    try {
+      const res = await axios.get(`${process.env.REACT_APP_BASE_API_URL}/users/profile`, {
+        withCredentials: true,
+      });
+      console.log("🧑‍💻 Logged-in user profile:", res.data);
+      setUserId(res.data.id);
+    } catch (err) {
+      console.error("🚫 Failed to fetch user profile:", err);
+      setLoginOpen(true);
+    }
+  };
+  fetchUserId();
+}, []);
+
   // Debounced function to fetch food options every 300ms (after input is changed)
   const handleFetchFoodOptions = debounce(async (query) => {
     console.log("Fetching food options for query:", query);
@@ -40,6 +56,7 @@ const Fridge = () => {
           params: {
             search_query: query,
           },
+          withCredentials: true,
         }
       );
 
@@ -76,11 +93,13 @@ const Fridge = () => {
   }, [inputValue, handleFetchFoodOptions]);
 
   useEffect(() => {
+    console.log("📦 userId used to fetch fridge items:", userId);
     const fetchFridgeItems = async () => {
       if (userId) {
         try {
           const response = await axios.get(`${process.env.REACT_APP_BASE_API_URL}/ingredients`, {
             params: { userId },
+            withCredentials: true,
           });
           setFoodItems(response.data);  // ⬅️ stores fetched ingredients in state
         } catch (error) {
@@ -98,7 +117,7 @@ const Fridge = () => {
     return () => {
       handleFetchFoodOptions.cancel();
     };
-  }, [fridgeUpdateTrigger]);
+  }, [fridgeUpdateTrigger, userId]);
 
   const handleAddFoodItem = async (newFoodItem) => {
     for (let i = 0; i < foodItems.length; i++) {
@@ -123,6 +142,8 @@ const Fridge = () => {
           userId,
           unit: "count",
           description: newFoodItem.foodNutrients ? JSON.stringify(newFoodItem.foodNutrients) : "",
+        }, {
+          withCredentials: true,
         });
         setFoodItems((prevItems) => [...prevItems, { ...newFoodItem, id: response.data.id }]);
         setFridgeUpdateTrigger(prev => prev + 1);
@@ -147,6 +168,7 @@ const Fridge = () => {
       try {
         await axios.delete(`${process.env.REACT_APP_BASE_API_URL}/ingredients/${foodItemToDelete.id}`, {
           params: { userId },
+          withCredentials: true,
         });
         setFoodItems(updatedFoodItems);
         setFridgeUpdateTrigger(prev => prev + 1);

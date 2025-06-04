@@ -10,11 +10,17 @@ const Profile = () => {
 
   const handleSaveChanges = async () => {
     const updatedData = profileRef.current?.getProfileData();
-    const userId = localStorage.getItem('userId');
+    const res = await axios.get(`${process.env.REACT_APP_BASE_API_URL}/users/profile`, {
+      withCredentials: true,
+    });
+    const userId = res.data.id;
+    console.log("userId is ", userId);
     if (!userId || !updatedData) return;
 
     try {
-      await axios.put(`${process.env.REACT_APP_BASE_API_URL}/users/${userId}`, updatedData);
+      await axios.put(`${process.env.REACT_APP_BASE_API_URL}/users/${userId}`, updatedData, {
+        withCredentials: true,
+      });
       alert('Profile updated successfully!');
     } catch (err) {
       console.error('Failed to update profile:', err);

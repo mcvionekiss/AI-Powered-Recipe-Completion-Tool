@@ -1,5 +1,6 @@
 const db = require("../db"); // import the database connection
 const express = require("express");
+const cookieParser = require("cookie-parser");
 
 const router = express.Router();
 
@@ -26,6 +27,24 @@ router.post("/", async (req, res) => {
   } catch (error) {
     console.error("Error creating user:", error);
     res.status(500).json({ error: "Failed to create user" });
+  }
+});
+
+router.get("/profile", async (req, res) => {
+  const userId = req.cookies?.userId;
+  if (!userId) {
+    return res.status(401).json({ error: "Not logged in" });
+  }
+
+  try {
+    const [rows] = await db.query("SELECT * FROM user WHERE id = ?", [userId]);
+    if (rows.length === 0) {
+      return res.status(404).json({ error: "User not found" });
+    }
+    res.json(rows[0]);
+  } catch (error) {
+    console.error("Error fetching profile:", error);
+    res.status(500).json({ error: "Failed to fetch profile" });
   }
 });
 
@@ -79,7 +98,13 @@ router.post("/login", async (req, res) => {
       [email, password]
     );
     if (rows.length > 0) {
-      res.json({ success: true, user: rows[0] });
+      const user = rows[0];
+      res.cookie("userId", user.id, {
+        httpOnly: true,
+        sameSite: "Lax",
+        secure: false // change to true in production with HTTPS
+      });
+      res.json({ success: true, user });
     } else {
       res.status(401).json({ success: false, message: "Invalid email or password" });
     }
@@ -103,3 +128,9 @@ router.get("/ingredients", async (req, res) => {
 
 
 module.exports = router;
+
+// LOGOUT a user
+router.post("/logout", (req, res) => {
+  res.clearCookie("userId");
+  res.status(200).json({ message: "Logged out" });
+});

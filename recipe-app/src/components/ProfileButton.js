@@ -26,10 +26,18 @@ const ProfileButton = ({ onTriggerLogin }) => {
     navigate('/profile');
   };
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
     handleClose();
+    try {
+      await fetch(`${process.env.REACT_APP_BASE_API_URL}/users/logout`, {
+        method: 'POST',
+        credentials: 'include',
+      });
+    } catch (err) {
+      console.error('Error during logout:', err);
+    }
     localStorage.clear();
-    navigate('/dashboard'); 
+    navigate('/dashboard');
     window.location.reload(); // force a clean reload to remove any in-memory data
   };
 

@@ -12,8 +12,9 @@ const ProfileForm = forwardRef((props, ref) => {
       if (!userEmail) return;
 
       try {
-        const userId = localStorage.getItem("userId");
-        const res = await axios.get(`${process.env.REACT_APP_BASE_API_URL}/users/${userId}`);
+        const res = await axios.get(`${process.env.REACT_APP_BASE_API_URL}/users/profile`, {
+          withCredentials: true,
+        });
         const user = res.data;
         setProfile({
           firstName: user.firstName || '',

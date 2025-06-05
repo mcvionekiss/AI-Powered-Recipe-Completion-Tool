@@ -20,6 +20,7 @@ router.post('/', async (req, res) => {
 router.get('/', async (req, res) => {
   try {
     const [rows] = await db.execute('SELECT * FROM recipe_ingredient');
+    console.log("Fetched ingredients:", rows);
     res.json(rows);
   } catch (err) {
     res.status(500).json({ error: err.message });

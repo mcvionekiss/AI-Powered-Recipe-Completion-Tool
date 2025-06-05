@@ -5,6 +5,7 @@ import { Box } from '@mui/material';
 import filterIcon from './filter.png';
 import './Kitchen.css'; // Your custom styles
 import { Recipe } from '../components/Recipe';
+
 import LogIn from './LogIn';
 import axios from 'axios';
 
@@ -18,15 +19,9 @@ import axios from 'axios';
 
 
 
+
 const Kitchen = () => {
  const [loginOpen, setLoginOpen] = useState(false);
-
-
-
-
-// useEffect(() => {
-//  console.log(fetchData(), []);
-// })
 
 
  const [items, setItems] = useState([]);
@@ -49,26 +44,25 @@ const Kitchen = () => {
       instructions: recipe.instructions,
     },
   ]);
-  // console.log("items:", items);
 }
  
 
  const handleGenerateRecipe = async (query) => {
   try{
-    // console.log("query:", query);
+    const recipes = await axios.get(`${process.env.REACT_APP_BASE_API_URL}/recipes/ingredients`, {params: {userId: 6}});
+    const ingredients = {};
+    recipes.data.forEach(item => {
+      ingredients[item.name] = Number(item.quantity);
+    })
     const new_recipe = await axios.get(
         `${process.env.REACT_APP_BASE_API_URL}/recipe/generate`,
         {
-          params: {
-            cheese: '1',
-            dough: '1',
-            tomato_sauce: '0.5'
-          },
+          params: ingredients,
           withCredentials: true
         }
       );
       const parsedRecipe = JSON.parse(new_recipe.data.recipe);
-      addItem(parsedRecipe);
+      // addItem(parsedRecipe);
       console.log("recipe:", parsedRecipe);
     }catch(error){
       console.error("Error generating recipe:", error);

@@ -5,7 +5,7 @@ const express = require("express");
 // create router
 const router = express.Router();
 
-openai = new OpenAI({apiKey: ""});
+openai = new OpenAI({apiKey: process.env.CHAT_GPT_API_KEY});
 
 
 router.get("/generate", async (req, res) => {

@@ -18,6 +18,7 @@ router.post('/', async (req, res) => {
 
 // READ ALL
 router.get('/', async (req, res) => {
+  console.log("Fetching all recipes");
   try {
     const [rows] = await db.execute('SELECT * FROM recipe');
     res.json(rows);
@@ -25,6 +26,18 @@ router.get('/', async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
+
+//READ USER INGREDIENTS
+router.get("/ingredients", async (req, res) => {
+  console.log("Fetching ingredients");
+  try {
+    const [rows] = await db.execute('SELECT * FROM ingredient WHERE userId=?', [req.query.userId]);
+    res.json(rows);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 
 // UPDATE
 router.put('/:id', async (req, res) => {

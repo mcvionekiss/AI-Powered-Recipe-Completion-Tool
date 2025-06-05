@@ -19,6 +19,7 @@ app.listen(process.env.EXPRESS_PORT, () => {
 const ingredients_route = require("./routes/ingredientsService.js");
 const user_route = require("./routes/userService.js");
 const recipe_route = require("./routes/generateRecipe.js");
+const recipes_route = require("./routes/recipesService.js");
 
 // middleware that will trigger for every request that comes in\
 app.use(express.json()); // if any requests come in, parse json data from request body and attach to request object
@@ -32,3 +33,4 @@ app.use((req, res, next) => {
 app.use("/ingredients", ingredients_route); // route for ingredients service
 app.use("/users", user_route); // route for user service
 app.use("/recipe", recipe_route); // route for user service
+app.use("/recipes", recipes_route); // route for user service

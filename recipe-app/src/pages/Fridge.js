@@ -39,8 +39,8 @@ const Fridge = () => {
       console.log("🧑‍💻 Logged-in user profile:", res.data);
       setUserId(res.data.id);
     } catch (err) {
-      console.error("🚫 Failed to fetch user profile:", err);
-      setLoginOpen(true);
+      console.warn("Guest user mode: no logged-in profile detected.");
+      setUserId(null); // Explicitly mark as guest
     }
   };
   fetchUserId();

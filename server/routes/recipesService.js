@@ -64,4 +64,21 @@ router.delete('/:id', async (req, res) => {
   }
 });
 
+
+//add recipe data to recipe table
+router.post('/addRecipe', async (req, res) => {
+  console.log("Adding recipe");
+  const { name, description, instructions} = req.body;
+  console.log("name:", name);
+  console.log("description:", description);
+  console.log("instructions:", instructions);
+  try {
+    await db.execute('INSERT INTO recipe (name, description, instructions, userId) VALUES (?, ?, ?, ?)', [name, description, instructions, 6]);
+    console.log("Recipe added");
+    res.json(`Recipe added`);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 module.exports = router;

@@ -32,7 +32,10 @@ router.get("/generate", async (req, res) => {
           { 
             "name": recipe_name,
             "description": recipe_description",
-            "instructions": cooking_instructions}
+            "instructions": cooking_instructions,
+            "ingredientsUsed": {"ingredientName": quantity, ...},
+            "extraIngredients": {"ingredientName": quantity, ...}  //ingredients that user does not have but are needed for the recipe
+
           }
              `,
           },

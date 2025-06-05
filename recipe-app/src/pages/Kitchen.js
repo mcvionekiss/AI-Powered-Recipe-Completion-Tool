@@ -11,7 +11,7 @@ import axios from 'axios';
 
 
 
-
+const new_recipe = "";
 
 
 
@@ -62,11 +62,22 @@ const Kitchen = () => {
         }
       );
       const parsedRecipe = JSON.parse(new_recipe.data.recipe);
-      // addItem(parsedRecipe);
+      // console.log("recipe:", parsedRecipe);
+      addItem(parsedRecipe);
+      handleAddRecipe(parsedRecipe);
       console.log("recipe:", parsedRecipe);
     }catch(error){
       console.error("Error generating recipe:", error);
     }
+ }
+
+ const handleAddRecipe = async (recipe) => {
+  try{
+    const response = await axios.post(`${process.env.REACT_APP_BASE_API_URL}/recipes/addRecipe`, recipe);
+    console.log("response:", response);
+  }catch(error){
+    console.error("Error adding recipe:", error);
+  }
  }
 
 

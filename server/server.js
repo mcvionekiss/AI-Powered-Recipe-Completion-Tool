@@ -1,15 +1,18 @@
 require("dotenv").config();
 
 const express = require("express");
-const cookieParser = require('cookie-parser');
+const cookieParser = require("cookie-parser");
 const cors = require("cors");
 
 // create express app
 const app = express();
 app.use(
   cors({
-    origin: "http://localhost:3000", // allow requests from this domain
-    credentials: true
+    origin: [
+      "http://localhost:3000",
+      "https://main.d2xotiz8jub08m.amplifyapp.com",
+    ], // allow requests from this domain
+    credentials: true,
   })
 );
 app.listen(process.env.EXPRESS_PORT, () => {

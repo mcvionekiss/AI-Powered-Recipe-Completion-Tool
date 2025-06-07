@@ -35,9 +35,8 @@ const Kitchen = () => {
   try{
     console.log("acquiring user recipes");
     const response = await axios.get(`${process.env.REACT_APP_BASE_API_URL}/recipes/user`, {params: {userId: 6}})
-    console.log("data:", response.data);
+    // console.log("data:", response.data);
     for (const key in response.data){
-      console.log("key:", key);
       addItem(response.data[key]);
     }
     
@@ -64,6 +63,30 @@ const Kitchen = () => {
     },
   ]);
 }
+
+const removeItem = async (recipe) => {
+  try {
+    console.log("Inside removeItem:", recipe.name);
+
+    // Send DELETE request to your API
+    const response = await axios.delete(
+      `${process.env.REACT_APP_BASE_API_URL}/recipes/data`,
+      {
+        params: { name: recipe.name, userId: 6 },
+      }
+    );
+
+    console.log("Response from backend:", response.data.message);
+
+    // Safely remove the item from state
+    setItems((prevItems) =>
+      prevItems.filter((item) => item.name !== recipe.name)
+    );
+  } catch (error) {
+    console.error("Error removing item:", error);
+  }
+};
+
  
 
  const handleGenerateRecipe = async (query) => {
@@ -159,7 +182,7 @@ const Kitchen = () => {
              foodItem={foodItem}
              onClick={() => handleShowRecipeDetails(foodItem)}
              onDelete={(itemToDelete) =>
-               setItems((prevItems) => prevItems.filter((item) => item !== itemToDelete))
+               removeItem(itemToDelete)
              }
            />
          ))}

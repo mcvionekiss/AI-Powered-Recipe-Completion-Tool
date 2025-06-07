@@ -69,7 +69,20 @@ router.put('/:id', async (req, res) => {
   }
 });
 
-// DELETE
+router.delete('/data', async (req, res) => {
+  try {
+    console.log("inside function");
+    const data = await db.execute('SELECT * FROM recipe WHERE name=? AND userId=?', [req.query.name, req.query.userId]);
+    // console.log("this is the data from the backend: ", data[0][0].id);
+    await db.execute('DELETE FROM recipe WHERE id=? and userID=6', [data[0][0].id], [data[0][0].userId]);
+    res.json({message: data});
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+
+// DELETE THIS IS WHERE THE ERROR IS HAPPENING
 router.delete('/:id', async (req, res) => {
   try {
     await db.execute('DELETE FROM recipe WHERE id = ?', [req.params.id]);
@@ -78,6 +91,8 @@ router.delete('/:id', async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
+
+
 
 
 //add recipe data to recipe table

@@ -27,6 +27,21 @@ router.get('/', async (req, res) => {
   }
 });
 
+//READ SPECIFIC USERS RECIPES
+router.get('/user', async (req, res) => {
+  try{
+    const [data] = await db.execute('SELECT * FROM recipe WHERE userId=?', [req.query.userId]);
+    console.log("data:", data);
+    res.json(data);
+  } catch (error) {
+    console.log("Error fetching user recipes", error);
+  }
+
+
+});
+
+
+
 //READ USER INGREDIENTS
 router.get("/ingredients", async (req, res) => {
   console.log("Fetching ingredients");

@@ -1,17 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import RegularSidebar from '../components/RegularSidebar';
 import ProfileButton from '../components/ProfileButton';
 import { Box } from '@mui/material';
 import filterIcon from './filter.png';
 import './Kitchen.css'; // Your custom styles
 import { Recipe } from '../components/Recipe';
-
 import LogIn from './LogIn';
 import axios from 'axios';
 
-
-
-const new_recipe = "";
 
 
 
@@ -34,6 +30,29 @@ const Kitchen = () => {
  const handleShowRecipeDetails = (recipe) => {
    setSelectedItem(recipe);
  };
+
+ const getUserRecipes = async () => {
+  try{
+    console.log("acquiring user recipes");
+    const response = await axios.get(`${process.env.REACT_APP_BASE_API_URL}/recipes/user`, {params: {userId: 6}})
+    console.log("data:", response.data);
+    for (const key in response.data){
+      console.log("key:", key);
+      addItem(response.data[key]);
+    }
+    
+  }catch (error){
+    console.log("Error fetching user recipes", error);}
+ }
+
+ const hasFetched = useRef(false);
+
+ useEffect(() => {
+   if (!hasFetched.current) {
+     getUserRecipes();
+     hasFetched.current = true;
+   }
+ }, []);
 
  function addItem(recipe) {
   setItems(items => [

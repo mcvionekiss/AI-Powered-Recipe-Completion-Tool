@@ -1,16 +1,13 @@
 import React, { useEffect, useState, useRef } from 'react';
 import RegularSidebar from '../components/RegularSidebar';
 import ProfileButton from '../components/ProfileButton';
-import { Box } from '@mui/material';
 import filterIcon from './filter.png';
 import './Kitchen.css'; // Your custom styles
 import { userId, getUserId, setUserId } from '../App';
 import { Recipe } from '../components/Recipe';
 import LogIn from './LogIn';
 import axios from 'axios';
-
-
-
+import { Box, Menu, MenuItem, IconButton } from "@mui/material";
 
 
 
@@ -19,7 +16,7 @@ import axios from 'axios';
 
 const Kitchen = () => {
   const [loginOpen, setLoginOpen] = useState(false);
-
+  const [recipesToGenerate, setNumRecipes] = useState(1);
   const [items, setItems] = useState([]);
 
   const [selectedItem, setSelectedItem] = useState(null);
@@ -28,6 +25,22 @@ const Kitchen = () => {
   const handleShowRecipeDetails = (recipe) => {
     setSelectedItem(recipe);
   };
+
+
+  const [anchorEl, setAnchorEl] = useState(null);
+  const open = Boolean(anchorEl);
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = (option) => {
+    if (option) {
+      console.log("Selected Option:", option);
+    }
+    setAnchorEl(null);
+  };
+  
 
 
  const getUserRecipes = async () => {
@@ -95,27 +108,31 @@ const Kitchen = () => {
     }
   };
 
- const handleGenerateRecipe = async (query) => {
+ const handleGenerateRecipe = async () => {
   try{
     const recipes = await axios.get(`${process.env.REACT_APP_BASE_API_URL}/recipes/ingredients`, {params: {userId: getUserId()}});
     const ingredients = {};
     recipes.data.forEach(item => {
       ingredients[item.name] = Number(item.quantity);
     })
-    const new_recipe = await axios.get(
-        `${process.env.REACT_APP_BASE_API_URL}/recipe/generate`,
-        {
-          params: {ingredients, userSuggestion: searchText},
-          
-          withCredentials: true,
-        }
-      );
-      const parsedRecipe = JSON.parse(new_recipe.data.recipe);
-      // console.log("recipe:", parsedRecipe);
-      addItem(parsedRecipe);
-      handleAddRecipe(parsedRecipe);
+    console.log("recipes:", items);
+
+    for(let i = 0; i < recipesToGenerate; i++){
+      const new_recipe = await axios.get(
+          `${process.env.REACT_APP_BASE_API_URL}/recipe/generate`,
+          {
+            params: {ingredients, userSuggestion: searchText, previousRecipes: JSON.stringify(items)},
+            
+            withCredentials: true,
+          }
+        );
+        const parsedRecipe = JSON.parse(new_recipe.data.recipe);
+        // console.log("recipe:", parsedRecipe);
+        addItem(parsedRecipe);
+        handleAddRecipe(parsedRecipe);
+    }
       setSearchText("");
-      console.log("recipe:", parsedRecipe);
+      // console.log("recipe:", parsedRecipe);
     } catch (error) {
       console.error("Error generating recipe:", error);
     }
@@ -179,29 +196,45 @@ const Kitchen = () => {
 
           {/* Buttons */}
           <Box
-            size="large"
-            sx={{ display: "flex", justifyContent: "space-between", mt: 2 }}>
-            <button id="filter">
-              <img
-                src={filterIcon}
-                alt="filter icon"
-                style={{
-                  width: "16px",
-                  height: "16px",
-                  borderRadius: "50%",
-                  border: "2px solid rgb(0, 0, 0)",
-                  padding: "4px",
-                  backgroundColor: "white",
-                }}
-              />
-              Filter
-            </button>
-            <button
+        size="large"
+        sx={{ display: "flex", justifyContent: "space-between", mt: 2 }}
+      >
+        <IconButton
+          id="filter"
+          onClick={handleClick}
+          sx={{ display: "flex", alignItems: "center", gap: 1 }}
+        >
+          <img
+            src={filterIcon}
+            alt="filter icon"
+            style={{
+              width: "16px",
+              height: "16px",
+              borderRadius: "50%",
+              border: "2px solid rgb(0, 0, 0)",
+              padding: "4px",
+              backgroundColor: "white",
+            }}
+          />
+          Filter
+        </IconButton>
+
+        <Menu
+          anchorEl={anchorEl}
+          open={open}
+          onClose={() => handleClose(null)}
+          anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
+        >
+          <MenuItem onClick={() => setNumRecipes(1)}>Option 1</MenuItem>
+          <MenuItem onClick={() => setNumRecipes(2)}>Option 2</MenuItem>
+          <MenuItem onClick={() => setNumRecipes(3)}>Option 3</MenuItem>
+        </Menu>
+        <button
               id="generateRecipe"
-              onClick={() => handleGenerateRecipe("potato")}>
+              onClick={() => handleGenerateRecipe()}>
               Generate Recipe
-            </button>
-          </Box>
+        </button>
+      </Box>
 
           {/* Recipe List */}
           <Box id="Recipe-list-container" className="recipe-list-container">

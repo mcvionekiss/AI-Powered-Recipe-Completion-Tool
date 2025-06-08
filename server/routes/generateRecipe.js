@@ -43,6 +43,7 @@ router.get("/generate", async (req, res) => {
             "extraIngredients": {"ingredientName": quantity, ...}  //ingredients that user does not have but are needed for the recipe
 
           }
+            note the recipe does NOT need to use all the ingredients provided.
              `,
         },
       ],

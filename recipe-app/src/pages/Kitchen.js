@@ -1,21 +1,13 @@
-import React, { useEffect, useState, useRef } from 'react';
-import RegularSidebar from '../components/RegularSidebar';
-import ProfileButton from '../components/ProfileButton';
-import { Box } from '@mui/material';
-import filterIcon from './filter.png';
-import './Kitchen.css'; // Your custom styles
-import { userId, getUserId, setUserId } from '../App';
-import { Recipe } from '../components/Recipe';
-import LogIn from './LogIn';
-import axios from 'axios';
-
-
-
-
-
-
-
-
+import React, { useEffect, useState, useRef } from "react";
+import RegularSidebar from "../components/RegularSidebar";
+import ProfileButton from "../components/ProfileButton";
+import { Box } from "@mui/material";
+import filterIcon from "./filter.png";
+import "./Kitchen.css"; // Your custom styles
+import { userId, getUserId, setUserId } from "../App";
+import { Recipe } from "../components/Recipe";
+import LogIn from "./LogIn";
+import axios from "axios";
 
 const Kitchen = () => {
   const [loginOpen, setLoginOpen] = useState(false);
@@ -29,26 +21,31 @@ const Kitchen = () => {
     setSelectedItem(recipe);
   };
 
+  const getUserRecipes = async () => {
+    try {
+      console.log("acquiring user recipes");
+      const res = await axios.get(
+        `${process.env.REACT_APP_BASE_API_URL}/users/profile`,
+        {
+          withCredentials: true,
+        }
+      );
+      setUserId(res.data.id);
 
- const getUserRecipes = async () => {
-  try{
-    console.log("acquiring user recipes");
-    const res = await axios.get(`${process.env.REACT_APP_BASE_API_URL}/users/profile`, {
-      withCredentials: true,
-    });
-    setUserId(res.data.id);
-
-    console.log("userId:", userId);
-    const response = await axios.get(`${process.env.REACT_APP_BASE_API_URL}/recipes/user`, {params: {userId: getUserId()}})
-    console.log("userId:", userId);
-    console.log("data:", response.data);
-    for (const key in response.data){
-      addItem(response.data[key]);
+      console.log("userId:", userId);
+      const response = await axios.get(
+        `${process.env.REACT_APP_BASE_API_URL}/recipes/user`,
+        { params: { userId: getUserId() } }
+      );
+      console.log("userId:", userId);
+      console.log("data:", response.data);
+      for (const key in response.data) {
+        addItem(response.data[key]);
+      }
+    } catch (error) {
+      console.log("Error fetching user recipes", error);
     }
-    
-  }catch (error){
-    console.log("Error fetching user recipes", error);}
-}
+  };
 
   const hasFetched = useRef(false);
 
@@ -76,13 +73,13 @@ const Kitchen = () => {
     try {
       console.log("Inside removeItem:", recipe.name);
 
-    // Send DELETE request to your API
-    const response = await axios.delete(
-      `${process.env.REACT_APP_BASE_API_URL}/recipes/data`,
-      {
-        params: { name: recipe.name, userId: getUserId() },
-      }
-    );
+      // Send DELETE request to your API
+      const response = await axios.delete(
+        `${process.env.REACT_APP_BASE_API_URL}/recipes/data`,
+        {
+          params: { name: recipe.name, userId: getUserId() },
+        }
+      );
 
       console.log("Response from backend:", response.data.message);
 
@@ -95,18 +92,21 @@ const Kitchen = () => {
     }
   };
 
- const handleGenerateRecipe = async (query) => {
-  try{
-    const recipes = await axios.get(`${process.env.REACT_APP_BASE_API_URL}/recipes/ingredients`, {params: {userId: getUserId()}});
-    const ingredients = {};
-    recipes.data.forEach(item => {
-      ingredients[item.name] = Number(item.quantity);
-    })
-    const new_recipe = await axios.get(
+  const handleGenerateRecipe = async (query) => {
+    try {
+      const recipes = await axios.get(
+        `${process.env.REACT_APP_BASE_API_URL}/recipes/ingredients`,
+        { params: { userId: getUserId() } }
+      );
+      const ingredients = {};
+      recipes.data.forEach((item) => {
+        ingredients[item.name] = Number(item.quantity);
+      });
+      const new_recipe = await axios.get(
         `${process.env.REACT_APP_BASE_API_URL}/recipe/generate`,
         {
-          params: {ingredients, userSuggestion: searchText},
-          
+          params: { ingredients, userSuggestion: searchText },
+
           withCredentials: true,
         }
       );
@@ -121,21 +121,24 @@ const Kitchen = () => {
     }
   };
 
- const handleAddRecipe = async (recipe) => {
-  try{
-    const response = await axios.post(`${process.env.REACT_APP_BASE_API_URL}/recipes/addRecipe`, {
-      name: recipe.name,
-      description: recipe.description,
-      instructions: recipe.instructions,
-      userId: getUserId()
-    });
-    console.log("response:", response);
-  }catch(error){
-    console.error("Error adding recipe:", error);
-  }
- }
-
-
+  const handleAddRecipe = async (recipe) => {
+    try {
+      const response = await axios.post(
+        `${process.env.REACT_APP_BASE_API_URL}/recipes/addRecipe`,
+        {
+          name: recipe.name,
+          description: recipe.description,
+          instructions: recipe.instructions,
+          foodCategory: recipe.foodCategory,
+          cuisine: recipe.cuisine,
+          userId: getUserId(),
+        }
+      );
+      console.log("response:", response);
+    } catch (error) {
+      console.error("Error adding recipe:", error);
+    }
+  };
 
   return (
     <>
@@ -170,7 +173,7 @@ const Kitchen = () => {
           <Box sx={{ width: "100%", mt: 1 }}>
             <input
               type="text"
-              value={searchText} 
+              value={searchText}
               onChange={(e) => setSearchText(e.target.value)}
               placeholder="What are you in the mood for today?"
               className="search-input full-width"

@@ -31,7 +31,6 @@ router.get('/', async (req, res) => {
 router.get('/user', async (req, res) => {
   try{
     const [data] = await db.execute('SELECT * FROM recipe WHERE userId=?', [req.query.userId]);
-    console.log("data:", data);
     res.json(data);
   } catch (error) {
     console.log("Error fetching user recipes", error);
@@ -72,9 +71,11 @@ router.put('/:id', async (req, res) => {
 router.delete('/data', async (req, res) => {
   try {
     console.log("inside function");
+    console.log("req.query.name:", req.query.name);
+    console.log("req.query.userId:", req.query.userId);
     const data = await db.execute('SELECT * FROM recipe WHERE name=? AND userId=?', [req.query.name, req.query.userId]);
-    // console.log("this is the data from the backend: ", data[0][0].id);
-    await db.execute('DELETE FROM recipe WHERE id=? and userID=6', [data[0][0].id], [data[0][0].userId]);
+
+    await db.execute('DELETE FROM recipe WHERE id=? and userID=?', [data[0][0].id, data[0][0].userId]);
     res.json({message: data});
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -98,12 +99,13 @@ router.delete('/:id', async (req, res) => {
 //add recipe data to recipe table
 router.post('/addRecipe', async (req, res) => {
   console.log("Adding recipe");
-  const { name, description, instructions} = req.body;
+  const { name, description, instructions, userId } = req.body;
+  console.log("userId:", userId);
   console.log("name:", name);
   console.log("description:", description);
   console.log("instructions:", instructions);
   try {
-    await db.execute('INSERT INTO recipe (name, description, instructions, userId) VALUES (?, ?, ?, ?)', [name, description, instructions, 6]);
+    await db.execute('INSERT INTO recipe (name, description, instructions, userId) VALUES (?, ?, ?, ?)', [name, description, instructions, userId]);
     console.log("Recipe added");
     res.json(`Recipe added`);
   } catch (err) {

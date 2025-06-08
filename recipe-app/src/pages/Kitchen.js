@@ -4,6 +4,7 @@ import ProfileButton from '../components/ProfileButton';
 import { Box } from '@mui/material';
 import filterIcon from './filter.png';
 import './Kitchen.css'; // Your custom styles
+import { userId, getUserId, setUserId } from '../App';
 import { Recipe } from '../components/Recipe';
 import LogIn from './LogIn';
 import axios from 'axios';
@@ -34,15 +35,22 @@ const Kitchen = () => {
  const getUserRecipes = async () => {
   try{
     console.log("acquiring user recipes");
-    const response = await axios.get(`${process.env.REACT_APP_BASE_API_URL}/recipes/user`, {params: {userId: 6}})
-    // console.log("data:", response.data);
+    const res = await axios.get(`${process.env.REACT_APP_BASE_API_URL}/users/profile`, {
+      withCredentials: true,
+    });
+    setUserId(res.data.id);
+
+    console.log("userId:", userId);
+    const response = await axios.get(`${process.env.REACT_APP_BASE_API_URL}/recipes/user`, {params: {userId: getUserId()}})
+    console.log("userId:", userId);
+    console.log("data:", response.data);
     for (const key in response.data){
       addItem(response.data[key]);
     }
     
   }catch (error){
     console.log("Error fetching user recipes", error);}
- }
+}
 
  const hasFetched = useRef(false);
 
@@ -72,7 +80,7 @@ const removeItem = async (recipe) => {
     const response = await axios.delete(
       `${process.env.REACT_APP_BASE_API_URL}/recipes/data`,
       {
-        params: { name: recipe.name, userId: 6 },
+        params: { name: recipe.name, userId: getUserId() },
       }
     );
 
@@ -91,7 +99,7 @@ const removeItem = async (recipe) => {
 
  const handleGenerateRecipe = async (query) => {
   try{
-    const recipes = await axios.get(`${process.env.REACT_APP_BASE_API_URL}/recipes/ingredients`, {params: {userId: 6}});
+    const recipes = await axios.get(`${process.env.REACT_APP_BASE_API_URL}/recipes/ingredients`, {params: {userId: getUserId()}});
     const ingredients = {};
     recipes.data.forEach(item => {
       ingredients[item.name] = Number(item.quantity);
@@ -115,7 +123,12 @@ const removeItem = async (recipe) => {
 
  const handleAddRecipe = async (recipe) => {
   try{
-    const response = await axios.post(`${process.env.REACT_APP_BASE_API_URL}/recipes/addRecipe`, recipe);
+    const response = await axios.post(`${process.env.REACT_APP_BASE_API_URL}/recipes/addRecipe`, {
+      name: recipe.name,
+      description: recipe.description,
+      instructions: recipe.instructions,
+      userId: getUserId()
+    });
     console.log("response:", response);
   }catch(error){
     console.error("Error adding recipe:", error);

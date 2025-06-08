@@ -9,6 +9,13 @@ import Profile from './pages/Profile';
 import React, { useEffect } from 'react';
 import axios from 'axios';
 
+export var userId = "";
+export function setUserId(id) {
+  userId = id;
+}
+export function getUserId() {
+  return userId;
+}
 function App() {
   useEffect(() => {
     const fetchProfile = async () => {
@@ -16,7 +23,7 @@ function App() {
         const res = await axios.get(`${process.env.REACT_APP_BASE_API_URL}/users/profile`, {
           withCredentials: true,
         });
-        const userId = res.data.id;
+        userId = res.data.id;
         console.log("User profile loaded:", res.data);
         localStorage.setItem("userId", userId);
       } catch (err) {

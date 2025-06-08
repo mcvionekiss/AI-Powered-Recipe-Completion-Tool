@@ -29,6 +29,7 @@ const Kitchen = () => {
     setSelectedItem(recipe);
   };
 
+
  const getUserRecipes = async () => {
   try{
     console.log("acquiring user recipes");
@@ -104,7 +105,8 @@ const Kitchen = () => {
     const new_recipe = await axios.get(
         `${process.env.REACT_APP_BASE_API_URL}/recipe/generate`,
         {
-          params: ingredients,
+          params: {ingredients, userSuggestion: searchText},
+          
           withCredentials: true,
         }
       );
@@ -112,6 +114,7 @@ const Kitchen = () => {
       // console.log("recipe:", parsedRecipe);
       addItem(parsedRecipe);
       handleAddRecipe(parsedRecipe);
+      setSearchText("");
       console.log("recipe:", parsedRecipe);
     } catch (error) {
       console.error("Error generating recipe:", error);
@@ -167,9 +170,9 @@ const Kitchen = () => {
           <Box sx={{ width: "100%", mt: 1 }}>
             <input
               type="text"
-              value={searchText}
+              value={searchText} 
               onChange={(e) => setSearchText(e.target.value)}
-              placeholder="Search recipes..."
+              placeholder="What are you in the mood for today?"
               className="search-input full-width"
             />
           </Box>

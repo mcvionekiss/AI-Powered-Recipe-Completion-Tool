@@ -11,6 +11,7 @@ router.get("/generate", async (req, res) => {
   try {
     console.log("Received request to generate recipe");
     const ingredients = req.query;
+    console.log("req.query.userSuggestion:", req.query.userSuggestion);
     // console.log("Ingredients received:", ingredients);
     const parsedIngredients = Object.fromEntries(
       Object.entries(ingredients).map(([key, value]) => [
@@ -30,7 +31,8 @@ router.get("/generate", async (req, res) => {
         {
           role: "user",
           content: `You will be given cooking ingredients in JSON format {"name of ingredient": quantity}.
-             Generate a cooking recipe using the following ingredients: ${ingredientMapJSON}. Return only a json object in the form of 
+             Generate a cooking recipe using the following ingredients: ${ingredientMapJSON} and consider the user suggestion
+             for ${req.query.userSuggestion}. Return only a json object in the form of 
           { 
             "name": recipe_name,
             "foodCategory": food_category, //e.g. "Vegetarian", "Vegan", "Non-Vegetarian", "Dessert", "Snacks", "Beverage"

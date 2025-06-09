@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import debounce from "lodash.debounce";
 
-import { Box, TextField, IconButton } from "@mui/material";
+import { Box, TextField, IconButton, Typography } from "@mui/material";
 import Autocomplete from "@mui/material/Autocomplete";
 import AddIcon from "@mui/icons-material/Add";
 
@@ -232,7 +232,7 @@ const Fridge = () => {
             gap: 2,
             overflow: "auto",
           }}>
-          <h1>Add New Food!</h1>
+          <Typography variant="h4" component="h1">Add New Food!</Typography>
           <Box
             sx={{
               display: "flex",
@@ -313,7 +313,7 @@ const Fridge = () => {
                 width: "100%",
                 height: 50, // Fixed height for the header,
               }}>
-              <h2>Your Fridge</h2>
+              <Typography variant="h5" component="h2">Your Fridge</Typography>
               <Icon path={mdiFridge} size={2} />
             </Box>
 

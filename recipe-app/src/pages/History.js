@@ -72,7 +72,7 @@ const History = () => {
         >
           {/* Header */}
           <Box sx={{ textAlign: 'center', mt: 2 }}>
-            <h1>History</h1>
+            <Typography variant="h4" component="h1">History</Typography>
             <hr style={{ margin: '16px 0', border: 'none', borderTop: '2px solid #ccc' }} />
           </Box>
 

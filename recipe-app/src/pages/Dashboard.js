@@ -139,12 +139,8 @@ const Dashboard = () => {
           {/* Top Title and Profile Button */}
           <TipNotification />
           <ProfileButton onTriggerLogin={() => setLoginOpen(true)} />
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-            }}>
-            <h1>Dashboard</h1>
+          <Box sx={{ textAlign: 'center', mb: 2 }}>
+            <Typography variant="h4" component="h1">Dashboard</Typography>
           </Box>
 
           <Divider sx={{ mb: 1 }} />
@@ -165,7 +161,7 @@ const Dashboard = () => {
                 boxShadow: 3,
                 borderRadius: 2,
                 backgroundColor: "#f5f5f5",
-                pt: 0, // padding-top
+                pt: 1, // padding-top
                 pb: 1, // padding-bottom
                 pl: 4, // padding-left
                 pr: 4, // padding-right
@@ -181,7 +177,7 @@ const Dashboard = () => {
                     margin: 0,
                   }}
                 >
-                <h2>Your Food Ratios</h2>
+                <Typography variant="h5" component="h2">Your Food Ratios</Typography>
               </CardContent>
               {/* Food Category Ratios */}
               <CardContent
@@ -195,7 +191,7 @@ const Dashboard = () => {
                   boxShadow: 2,
                   width: "100%",
                 }}>
-                <h3>Food Categories</h3>
+                <Typography variant="h6" component="h3">Food Categories</Typography>
                 <PieChart width={300} height={250}>
                   <Pie
                     data={foodCategory}
@@ -228,7 +224,7 @@ const Dashboard = () => {
                   boxShadow: 2,
                   width: "100%",
                 }}>
-                <h3>Cuisines</h3>
+                <Typography variant="h6" component="h3">Cuisines</Typography>
                 <PieChart width={300} height={250}>
                   <Pie
                     data={cuisineRatios}
@@ -259,7 +255,7 @@ const Dashboard = () => {
                 boxShadow: 3,
                 borderRadius: 2,
                 backgroundColor: "#f5f5f5",
-                pt: 0, // padding-top
+                pt: 1, // padding-top
                 pb: 1, // padding-bottom
                 pl: 4, // padding-left
                 pr: 4, // padding-right
@@ -274,7 +270,7 @@ const Dashboard = () => {
                   border: 0,
                   margin: 0,
                 }}>
-                <h2>User Stats</h2>
+                <Typography variant="h5" component="h2">User Stats</Typography>
               </CardContent>
               {/* Total Recipes Card */}
               <CardContent
@@ -292,7 +288,7 @@ const Dashboard = () => {
                   padding: 2,
                   boxShadow: 2,
                 }}>
-                <h3>Total Recipes:</h3>
+                <Typography variant="h6" component="h3">Total Recipes:</Typography>
                 <Typography
                   variant="h3"
                   sx={{
@@ -325,7 +321,7 @@ const Dashboard = () => {
                   padding: 2,
                   boxShadow: 2,
                 }}>
-                <h3>Total Ingedients:</h3>
+                <Typography variant="h6" component="h3">Total Ingedients:</Typography>
                 <Typography
                   variant="h3"
                   sx={{
@@ -360,7 +356,7 @@ const Dashboard = () => {
                 }}>
                 {!showRecipeDetails ? (
                   <>
-                    <h3>Most Recent Recipe:</h3>
+                    <Typography variant="h6" component="h3">Most Recent Recipe:</Typography>
                     <Typography variant="h4" sx={{ fontStyle: "italic", fontSize: "1rem", }}>
                       ({new Date(recentRecipe.createdAt).toLocaleDateString()})
                     </Typography>

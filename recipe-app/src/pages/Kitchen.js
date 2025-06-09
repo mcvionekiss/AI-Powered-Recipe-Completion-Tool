@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef, useCallback } from "react";
 import RegularSidebar from "../components/RegularSidebar";
 import ProfileButton from "../components/ProfileButton";
-import { Box } from "@mui/material";
+import { Box, Typography, Button } from "@mui/material";
 import filterIcon from "./filter.png";
 import "./Kitchen.css"; // Your custom styles
 import { userId, getUserId, setUserId } from "../App";
@@ -158,7 +158,7 @@ const Kitchen = () => {
           }}>
           {/* Page Header */}
           <Box sx={{ textAlign: "center", mt: 2 }}>
-            <h1>Your Kitchen</h1>
+            <Typography variant="h4" component="h1">Kitchen</Typography>
             <hr
               style={{
                 marginTop: "16px",
@@ -183,31 +183,25 @@ const Kitchen = () => {
           {/* Buttons */}
           <Box
             size="large"
-            sx={{ display: "flex", justifyContent: "space-between", mt: 2 }}>
-            <button id="filter">
-              <img
-                src={filterIcon}
-                alt="filter icon"
-                style={{
-                  width: "16px",
-                  height: "16px",
-                  borderRadius: "50%",
-                  border: "2px solid rgb(0, 0, 0)",
-                  padding: "4px",
-                  backgroundColor: "white",
-                }}
-              />
-              Filter
-            </button>
-            <button
+            sx={{ display: "flex", justifyContent: "flex-end", mt: 2 }}>
+            <Button
               id="generateRecipe"
-              onClick={() => handleGenerateRecipe("potato")}>
+              variant="contained"
+              color="primary"
+              onClick={() => handleGenerateRecipe("potato")}
+              sx={{ textTransform: "none" }}
+            >
               Generate Recipe
-            </button>
+            </Button>
           </Box>
 
           {/* Recipe List */}
-          <Box id="Recipe-list-container" className="recipe-list-container">
+          <Box id="Recipe-list-container" className="recipe-list-container"
+            sx={{
+              width: "98.5%",
+              height: "67%", // <-- Fixed height for the outer box
+            }}
+          >
             {items.map((foodItem, index) => (
               <Recipe
                 key={index}

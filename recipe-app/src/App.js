@@ -3,7 +3,7 @@ import SignUp from "./pages/SignUp";
 import Dashboard from "./pages/Dashboard";
 import Fridge from "./pages/Fridge";
 import Kitchen from "./pages/Kitchen";
-import History from "./pages/Histroy";
+import History from "./pages/History";
 import About from "./pages/About";
 import Profile from "./pages/Profile";
 import React, { useEffect } from "react";

@@ -434,8 +434,6 @@ const Dashboard = () => {
                       variant="h4"
                       onClick={() => {
                         setShowRecipeDetails(true);
-                        console.log("Recipe details clicked");
-                        console.log(showRecipeDetails);
                       }}
                       sx={{
                         backgroundColor: "#1976d2",
@@ -446,7 +444,11 @@ const Dashboard = () => {
                         borderRadius: 10,
                         boxShadow: 2,
                         fontWeight: "bold",
-                        ":hover": { boxShadow: 4, backgroundColor: "#115293" },
+                        ":hover": {
+                          boxShadow: 4,
+                          backgroundColor: "#115293",
+                          cursor: "pointer",
+                        },
                         transition:
                           "box-shadow 0.3s ease-in-out, background-color 0.3s ease-in-out",
                       }}>

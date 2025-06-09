@@ -9,6 +9,8 @@ import axios from "axios";
 import Button from "@mui/material/Button";
 
 const Dashboard = () => {
+  const [userId, setUserId] = useState(null);
+
   const getRandomColor = () =>
     "#" +
     Math.floor(Math.random() * 16777215)
@@ -39,6 +41,26 @@ const Dashboard = () => {
 
   const [showRecipeDetails, setShowRecipeDetails] = useState(false);
 
+  useEffect(() => {
+    const fetchUserId = async () => {
+      try {
+        const res = await axios.get(
+          `${process.env.REACT_APP_BASE_API_URL}/users/profile`,
+          {
+            withCredentials: true,
+          }
+        );
+        localStorage.setItem("userId", res.data.id);
+        console.log("🧑‍💻 Logged-in user profile:", res.data);
+        setUserId(res.data.id);
+      } catch (err) {
+        console.warn("Guest user mode: no logged-in profile detected.");
+        setUserId(null); // Explicitly mark as guest
+      }
+    };
+    fetchUserId();
+  }, []);
+
   const fetchFoodRatios = useCallback(async () => {
     try {
       const response = await axios.get(
@@ -55,7 +77,7 @@ const Dashboard = () => {
     } catch (error) {
       console.error("Error loading food ratios:", error);
     }
-  }, []);
+  }, [userId]);
 
   const fetchTotalRecipes = useCallback(async () => {
     try {
@@ -74,7 +96,7 @@ const Dashboard = () => {
     } catch (error) {
       console.error("Error loading total recipes:", error);
     }
-  }, []);
+  }, [userId]);
 
   const fetchTotalIngredients = useCallback(async () => {
     try {
@@ -93,7 +115,7 @@ const Dashboard = () => {
     } catch (error) {
       console.error("Error loading total ingredients:", error);
     }
-  }, []);
+  }, [userId]);
 
   const fetchRecentRecipe = useCallback(async () => {
     try {
@@ -109,7 +131,7 @@ const Dashboard = () => {
     } catch (error) {
       console.error("Error loading recent recipe:", error);
     }
-  }, []);
+  }, [userId]);
 
   useEffect(() => {
     // fetchProfile();

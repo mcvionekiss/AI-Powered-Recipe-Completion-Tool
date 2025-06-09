@@ -190,7 +190,7 @@ const removeItem = async (recipe) => {
  const convertJsonToJSX = (data) => {
    return Object.entries(data).map(([key, value], index) => (
      <div key={index}>
-       <strong>{key}</strong>: {value}
+       {key}: {value}
      </div>
    ));
  };

@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import debounce from "lodash.debounce";
 
-import { Box, TextField, IconButton } from "@mui/material";
+import { Box, TextField, IconButton, Typography } from "@mui/material";
 import Autocomplete from "@mui/material/Autocomplete";
 import AddIcon from "@mui/icons-material/Add";
 
@@ -29,79 +29,88 @@ const Fridge = () => {
   const [selectedFoodItemDetails, setSelectedFoodItemDetails] = useState({});
 
   const [fridgeUpdateTrigger, setFridgeUpdateTrigger] = useState(0);
+  const debouncedFetchRef = useRef();
 
   useEffect(() => {
-  const fetchUserId = async () => {
-    try {
-      const res = await axios.get(`${process.env.REACT_APP_BASE_API_URL}/users/profile`, {
-        withCredentials: true,
-      });
-      console.log("🧑‍💻 Logged-in user profile:", res.data);
-      setUserId(res.data.id);
-    } catch (err) {
-      console.warn("Guest user mode: no logged-in profile detected.");
-      setUserId(null); // Explicitly mark as guest
-    }
-  };
-  fetchUserId();
-}, []);
+    debouncedFetchRef.current = debounce(async (query) => {
+      console.log("Fetching food options for query:", query);
+      try {
+        const response = await axios.get(
+          `${process.env.REACT_APP_BASE_API_URL}/ingredients/search`,
+          {
+            params: {
+              search_query: query,
+            },
+            withCredentials: true,
+          }
+        );
+
+        const results = response.data;
+        console.log("Fetched food options:", results);
+        // Remove duplicates by description + brandOwner
+        const uniqueOptions = [];
+        const seen = new Set();
+        results.forEach((item) => {
+          const key =
+            item.description + (item.brandOwner ? " | " + item.brandOwner : "");
+          if (!seen.has(key)) {
+            seen.add(key);
+            uniqueOptions.push(item);
+          }
+        });
+        setfoodOptions(uniqueOptions);
+      } catch (error) {
+        console.error("Error fetching food options:", error);
+      }
+    }, 300);
+  }, []);
+
+  useEffect(() => {
+    const fetchUserId = async () => {
+      try {
+        const res = await axios.get(
+          `${process.env.REACT_APP_BASE_API_URL}/users/profile`,
+          {
+            withCredentials: true,
+          }
+        );
+        console.log("🧑‍💻 Logged-in user profile:", res.data);
+        setUserId(res.data.id);
+      } catch (err) {
+        console.warn("Guest user mode: no logged-in profile detected.");
+        setUserId(null); // Explicitly mark as guest
+      }
+    };
+    fetchUserId();
+  }, []);
 
   // Debounced function to fetch food options every 300ms (after input is changed)
-  const handleFetchFoodOptions = debounce(async (query) => {
-    console.log("Fetching food options for query:", query);
-    try {
-      const response = await axios.get(
-        `${process.env.REACT_APP_BASE_API_URL}/ingredients/search`,
-        {
-          params: {
-            search_query: query,
-          },
-          withCredentials: true,
-        }
-      );
-
-      const results = response.data;
-      console.log("Fetched food options:", results);
-      // Remove duplicates by description + brandOwner
-      const uniqueOptions = [];
-      const seen = new Set();
-      results.forEach((item) => {
-        const key =
-          item.description + (item.brandOwner ? " | " + item.brandOwner : "");
-        if (!seen.has(key)) {
-          seen.add(key);
-          uniqueOptions.push(item);
-        }
-      });
-      setfoodOptions(uniqueOptions);
-    } catch (error) {
-      console.error("Error fetching food options:", error);
-    }
-  }, 300);
 
   useEffect(() => {
     // Fetch food options when input value changes
     if (inputValue && inputValue !== currentInputValue.current) {
       currentInputValue.current = inputValue;
-      handleFetchFoodOptions(inputValue);
+      debouncedFetchRef.current(inputValue);
     }
 
-    // Cleanup function to cancel the debounced function on unmount
     return () => {
-      handleFetchFoodOptions.cancel();
+      debouncedFetchRef.current?.cancel(); // cleanup on unmount
     };
-  }, [inputValue, handleFetchFoodOptions]);
+  }, [inputValue]);
 
   useEffect(() => {
     console.log("📦 userId used to fetch fridge items:", userId);
     const fetchFridgeItems = async () => {
       if (userId) {
         try {
-          const response = await axios.get(`${process.env.REACT_APP_BASE_API_URL}/ingredients`, {
-            params: { userId },
-            withCredentials: true,
-          });
-          setFoodItems(response.data);  // ⬅️ stores fetched ingredients in state
+          const response = await axios.get(
+            `${process.env.REACT_APP_BASE_API_URL}/ingredients`,
+            {
+              params: { userId },
+              withCredentials: true,
+            }
+          );
+          setFoodItems(response.data); // ⬅️ stores fetched ingredients in state
         } catch (error) {
           console.error("Error loading fridge from DB:", error);
         }
@@ -114,9 +123,6 @@ const Fridge = () => {
     };
 
     fetchFridgeItems();
-    return () => {
-      handleFetchFoodOptions.cancel();
-    };
   }, [fridgeUpdateTrigger, userId]);
 
   const handleAddFoodItem = async (newFoodItem) => {
@@ -128,25 +134,40 @@ const Fridge = () => {
           parseInt(updatedFoodItems[i].quantity) +
           parseInt(newFoodItem.quantity);
         setFoodItems(updatedFoodItems);
-        if (!userId) localStorage.setItem("fridgeItems", JSON.stringify(updatedFoodItems));
+        if (!userId)
+          localStorage.setItem("fridgeItems", JSON.stringify(updatedFoodItems));
         return;
       }
     }
 
     // Add the new food item to database or localStorage
     if (userId) {
-      console.log("trying to insert ", newFoodItem, userId, newFoodItem.description);
+      console.log(
+        "trying to insert ",
+        newFoodItem,
+        userId,
+        newFoodItem.description
+      );
       try {
-        const response = await axios.post(`${process.env.REACT_APP_BASE_API_URL}/ingredients`, {
-          ...newFoodItem,
-          userId,
-          unit: "count",
-          description: newFoodItem.foodNutrients ? JSON.stringify(newFoodItem.foodNutrients) : "",
-        }, {
-          withCredentials: true,
-        });
-        setFoodItems((prevItems) => [...prevItems, { ...newFoodItem, id: response.data.id }]);
-        setFridgeUpdateTrigger(prev => prev + 1);
+        const response = await axios.post(
+          `${process.env.REACT_APP_BASE_API_URL}/ingredients`,
+          {
+            ...newFoodItem,
+            userId,
+            unit: "count",
+            description: newFoodItem.foodNutrients
+              ? JSON.stringify(newFoodItem.foodNutrients)
+              : "",
+          },
+          {
+            withCredentials: true,
+          }
+        );
+        setFoodItems((prevItems) => [
+          ...prevItems,
+          { ...newFoodItem, id: response.data.id },
+        ]);
+        setFridgeUpdateTrigger((prev) => prev + 1);
       } catch (error) {
         console.error("Error adding food to DB:", error);
       }
@@ -154,7 +175,7 @@ const Fridge = () => {
       const updatedItems = [...foodItems, newFoodItem];
       setFoodItems(updatedItems);
       localStorage.setItem("fridgeItems", JSON.stringify(updatedItems));
-      setFridgeUpdateTrigger(prev => prev + 1);
+      setFridgeUpdateTrigger((prev) => prev + 1);
     }
   };
 
@@ -163,22 +184,25 @@ const Fridge = () => {
     const updatedFoodItems = foodItems.filter(
       (foodItem) => foodItem.name !== foodItemToDelete.name
     );
-    
+
     if (userId) {
       try {
-        await axios.delete(`${process.env.REACT_APP_BASE_API_URL}/ingredients/${foodItemToDelete.id}`, {
-          params: { userId },
-          withCredentials: true,
-        });
+        await axios.delete(
+          `${process.env.REACT_APP_BASE_API_URL}/ingredients/${foodItemToDelete.id}`,
+          {
+            params: { userId },
+            withCredentials: true,
+          }
+        );
         setFoodItems(updatedFoodItems);
-        setFridgeUpdateTrigger(prev => prev + 1);
+        setFridgeUpdateTrigger((prev) => prev + 1);
       } catch (error) {
         console.error("Error deleting food from DB:", error);
       }
     } else {
       setFoodItems(updatedFoodItems);
       localStorage.setItem("fridgeItems", JSON.stringify(updatedFoodItems));
-      setFridgeUpdateTrigger(prev => prev + 1);
+      setFridgeUpdateTrigger((prev) => prev + 1);
     }
   };
 
@@ -208,7 +232,7 @@ const Fridge = () => {
             gap: 2,
             overflow: "auto",
           }}>
-          <h1>Add new food!</h1>
+          <Typography variant="h4" component="h1">Add New Food!</Typography>
           <Box
             sx={{
               display: "flex",
@@ -252,7 +276,8 @@ const Fridge = () => {
                   fdcId: selectedFoodItem.fdcId ?? null,
                   foodCategory: selectedFoodItem.foodCategory ?? null,
                   brandOwner: selectedFoodItem.brandOwner ?? null,
-                  foodNutrients: selectedFoodItem.foodNutrients ?? "no foodNutrients",
+                  foodNutrients:
+                    selectedFoodItem.foodNutrients ?? "no foodNutrients",
                   quantity: "1",
                 })
               }
@@ -288,7 +313,7 @@ const Fridge = () => {
                 width: "100%",
                 height: 50, // Fixed height for the header,
               }}>
-              <h2>Your Fridge</h2>
+              <Typography variant="h5" component="h2">Your Fridge</Typography>
               <Icon path={mdiFridge} size={2} />
             </Box>
 

@@ -115,15 +115,6 @@ const SignUpForm = () => {
           onClick={handleSubmit}>
           Sign Up
         </Button>
-        <Button
-          type="button"
-          color="secondary"
-          fullWidth
-          variant="contained"
-          sx={{ mt: 3 }}
-          onClick={getUsers}>
-          GET USERS
-        </Button>
       </Box>
     </Container>
   );

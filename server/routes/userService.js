@@ -168,7 +168,12 @@ router.get("/recentRecipe", async (req, res) => {
 
 // LOGOUT a user
 router.post("/logout", (req, res) => {
-  res.clearCookie("userId");
+  res.clearCookie("userId", {
+    httpOnly: true,
+    sameSite: "Lax",
+    secure: false, // change to true in production with HTTPS
+  });
+  // domain: "localhost", // specify domain if needed});
   res.status(200).json({ message: "Logged out" });
 });
 

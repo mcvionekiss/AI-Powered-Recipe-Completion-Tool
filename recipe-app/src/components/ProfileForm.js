@@ -1,56 +1,57 @@
-import React, { useEffect, useState, useImperativeHandle, forwardRef } from 'react';
-import { Box, TextField } from '@mui/material';
-import axios from 'axios';
+import React, {
+  useEffect,
+  useState,
+  useImperativeHandle,
+  forwardRef,
+} from "react";
+import { Box, TextField } from "@mui/material";
+import { useContext } from "react";
+import { UserContext } from "../Context/UserContext";
 
 const ProfileForm = forwardRef((props, ref) => {
-  const [profile, setProfile] = useState({ firstName: '', lastName: '', email: '' });
-  const [errors, setErrors] = useState({ firstName: '', lastName: '', email: '' });
+  const { user } = useContext(UserContext);
+
+  const [profile, setProfile] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+  });
+  const [errors, setErrors] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+  });
 
   useEffect(() => {
-    const fetchUserProfile = async () => {
-      const userEmail = localStorage.getItem('userEmail');
-      if (!userEmail) return;
-
-      try {
-        const res = await axios.get(`${process.env.REACT_APP_BASE_API_URL}/users/profile`, {
-          withCredentials: true,
-        });
-        const user = res.data;
-        setProfile({
-          firstName: user.firstName || '',
-          lastName: user.lastName || '',
-          email: user.email || ''
-        });
-      } catch (err) {
-        console.error('Error fetching profile:', err);
-      }
-    };
-
-    fetchUserProfile();
-  }, []);
+    setProfile({
+      firstName: user?.firstName || "",
+      lastName: user?.lastName || "",
+      email: user?.email || "",
+    });
+  }, [user]);
 
   useImperativeHandle(ref, () => ({
-    getProfileData: () => profile
+    getProfileData: () => profile,
   }));
 
   const validateField = (field, value) => {
-    let message = '';
+    let message = "";
     if (!value.trim()) {
-      message = 'This field is required';
+      message = "This field is required";
     } else if (
-      field === 'email' &&
+      field === "email" &&
       !/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(value)
     ) {
-      message = 'Invalid email address';
+      message = "Invalid email address";
     }
     setErrors((prev) => ({ ...prev, [field]: message }));
   };
 
   const handleChange = (field) => (event) => {
     const value = event.target.value;
-    setProfile(prevProfile => ({
+    setProfile((prevProfile) => ({
       ...prevProfile,
-      [field]: value
+      [field]: value,
     }));
     validateField(field, value);
   };
@@ -59,17 +60,16 @@ const ProfileForm = forwardRef((props, ref) => {
     <Box
       component="form"
       sx={{
-        width: '100%',
+        width: "100%",
         maxWidth: 400,
-        display: 'flex',
-        flexDirection: 'column',
+        display: "flex",
+        flexDirection: "column",
         gap: 3,
-      }}
-    >
+      }}>
       <TextField
         label="First Name"
         value={profile.firstName}
-        onChange={handleChange('firstName')}
+        onChange={handleChange("firstName")}
         variant="outlined"
         fullWidth
         error={Boolean(errors.firstName)}
@@ -78,7 +78,7 @@ const ProfileForm = forwardRef((props, ref) => {
       <TextField
         label="Last Name"
         value={profile.lastName}
-        onChange={handleChange('lastName')}
+        onChange={handleChange("lastName")}
         variant="outlined"
         fullWidth
         error={Boolean(errors.lastName)}
@@ -87,7 +87,7 @@ const ProfileForm = forwardRef((props, ref) => {
       <TextField
         label="Email"
         value={profile.email}
-        onChange={handleChange('email')}
+        onChange={handleChange("email")}
         variant="outlined"
         fullWidth
         error={Boolean(errors.email)}

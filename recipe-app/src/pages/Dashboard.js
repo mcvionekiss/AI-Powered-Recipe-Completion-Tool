@@ -50,7 +50,6 @@ const Dashboard = () => {
             withCredentials: true,
           }
         );
-        localStorage.setItem("userId", res.data.id);
         console.log("🧑‍💻 Logged-in user profile:", res.data);
         setUserId(res.data.id);
       } catch (err) {
@@ -67,7 +66,7 @@ const Dashboard = () => {
         `${process.env.REACT_APP_BASE_API_URL}/users/ratios`,
 
         {
-          params: { userId: localStorage.getItem("userId") },
+          params: { userId: userId },
           withCredentials: true,
         }
       );
@@ -84,7 +83,7 @@ const Dashboard = () => {
       const response = await axios.get(
         `${process.env.REACT_APP_BASE_API_URL}/users/totalRecipes`,
         {
-          params: { userId: localStorage.getItem("userId") },
+          params: { userId: userId },
           withCredentials: true,
         }
       );
@@ -103,7 +102,7 @@ const Dashboard = () => {
       const response = await axios.get(
         `${process.env.REACT_APP_BASE_API_URL}/users/totalIngredients`,
         {
-          params: { userId: localStorage.getItem("userId") },
+          params: { userId: userId},
           withCredentials: true,
         }
       );
@@ -122,7 +121,7 @@ const Dashboard = () => {
       const response = await axios.get(
         `${process.env.REACT_APP_BASE_API_URL}/users/recentRecipe`,
         {
-          params: { userId: localStorage.getItem("userId") },
+          params: { userId: userId},
           withCredentials: true,
         }
       );
@@ -133,18 +132,19 @@ const Dashboard = () => {
     }
   }, [userId]);
 
-  useEffect(() => {
-    // fetchProfile();
-    fetchFoodRatios();
-    fetchTotalRecipes();
-    fetchTotalIngredients();
-    fetchRecentRecipe();
-  }, [
-    fetchFoodRatios,
-    fetchTotalRecipes,
-    fetchTotalIngredients,
-    fetchRecentRecipe,
-  ]);
+useEffect(() => {
+  if (!userId) return;
+  fetchFoodRatios();
+  fetchTotalRecipes();
+  fetchTotalIngredients();
+  fetchRecentRecipe();
+}, [
+  userId,
+  fetchFoodRatios,
+  fetchTotalRecipes,
+  fetchTotalIngredients,
+  fetchRecentRecipe,
+]);
 
   // load food ratios from db
 

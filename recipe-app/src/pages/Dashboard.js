@@ -142,14 +142,12 @@ const Dashboard = () => {
           <Box
             sx={{
               display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              mb: 3,
+              justifyContent: "center",
             }}>
-            <Typography variant="h4">Dashboard</Typography>
+            <h1>Dashboard</h1>
           </Box>
 
-          <Divider sx={{ mb: 4 }} />
+          <Divider sx={{ mb: 1 }} />
 
           {/* Dashboard Content */}
           <Box
@@ -167,26 +165,23 @@ const Dashboard = () => {
                 boxShadow: 3,
                 borderRadius: 2,
                 backgroundColor: "#f5f5f5",
-                padding: 4,
-                gap: 4,
+                pt: 0, // padding-top
+                pb: 1, // padding-bottom
+                pl: 4, // padding-left
+                pr: 4, // padding-right
+                gap: 2,
               }}>
               <CardContent
                 sx={{
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                }}>
-                <Typography
-                  variant="h3"
-                  gutterBottom
-                  sx={{
-                    mb: 2,
-                    textUnderlineOffset: 3,
-                    textDecoration: "underline",
-                    fontWeight: "bold",
-                  }}>
-                  Your Food Ratios
-                </Typography>
+                    alignSelf: "flex-start",  // Align to the left of the Card
+                    width: "100%",            // Ensure it spans full width
+                    textAlign: "left",        // Align text left within the box
+                    padding: 0,
+                    border: 0,
+                    margin: 0,
+                  }}
+                >
+                <h2>Your Food Ratios</h2>
               </CardContent>
               {/* Food Category Ratios */}
               <CardContent
@@ -194,25 +189,14 @@ const Dashboard = () => {
                   display: "flex",
                   flexDirection: "column",
                   alignItems: "center",
-                  backgroundColor: "#e0f7fa",
+                  backgroundColor: "transparent",
                   borderRadius: 2,
                   padding: 2,
                   boxShadow: 2,
-                  ":hover": { boxShadow: 4, backgroundColor: "#b2ebf2" },
-                  transition:
-                    "box-shadow 0.3s ease-in-out , background-color 0.3s ease-in-out",
                   width: "100%",
                 }}>
-                <Typography
-                  variant="h4"
-                  sx={{
-                    height: "5px",
-                    textShadow: "1px 1px 2px rgba(0,0,0,0.3)",
-                    fontStyle: "italic",
-                  }}>
-                  Food Categories
-                </Typography>
-                <PieChart width={400} height={300}>
+                <h3>Food Categories</h3>
+                <PieChart width={300} height={250}>
                   <Pie
                     data={foodCategory}
                     cx="50%"
@@ -238,25 +222,14 @@ const Dashboard = () => {
                   display: "flex",
                   flexDirection: "column",
                   alignItems: "center",
-                  backgroundColor: "#e0f7fa",
+                  backgroundColor: "transparent",
                   borderRadius: 2,
                   padding: 2,
                   boxShadow: 2,
-                  ":hover": { boxShadow: 4, backgroundColor: "#b2ebf2" },
-                  transition:
-                    "box-shadow 0.3s ease-in-out , background-color 0.3s ease-in-out",
                   width: "100%",
                 }}>
-                <Typography
-                  variant="h4"
-                  sx={{
-                    height: "5px",
-                    textShadow: "1px 1px 2px rgba(0,0,0,0.3)",
-                    fontStyle: "italic",
-                  }}>
-                  Cuisines
-                </Typography>
-                <PieChart width={400} height={300}>
+                <h3>Cuisines</h3>
+                <PieChart width={300} height={250}>
                   <Pie
                     data={cuisineRatios}
                     cx="50%"
@@ -286,26 +259,22 @@ const Dashboard = () => {
                 boxShadow: 3,
                 borderRadius: 2,
                 backgroundColor: "#f5f5f5",
-                padding: 4,
-                gap: 4,
+                pt: 0, // padding-top
+                pb: 1, // padding-bottom
+                pl: 4, // padding-left
+                pr: 4, // padding-right
+                gap: 2,
               }}>
               <CardContent
                 sx={{
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
+                  alignSelf: "flex-start",  // Align to the left of the Card
+                  width: "100%",            // Ensure it spans full width
+                  textAlign: "left",        // Align text left within the box
+                  padding: 0,
+                  border: 0,
+                  margin: 0,
                 }}>
-                <Typography
-                  variant="h3"
-                  gutterBottom
-                  sx={{
-                    mb: 2,
-                    textUnderlineOffset: 3,
-                    textDecoration: "underline",
-                    fontWeight: "bold",
-                  }}>
-                  User Stats
-                </Typography>
+                <h2>User Stats</h2>
               </CardContent>
               {/* Total Recipes Card */}
               <CardContent
@@ -318,34 +287,23 @@ const Dashboard = () => {
                   justifyContent: "center",
                   width: "100%",
                   textAlign: "center",
-                  backgroundColor: "#e0f7fa",
+                  backgroundColor: "transparent",
                   borderRadius: 2,
                   padding: 2,
                   boxShadow: 2,
-                  ":hover": { boxShadow: 4, backgroundColor: "#b2ebf2" },
-                  transition:
-                    "box-shadow 0.3s ease-in-out , background-color 0.3s ease-in-out",
                 }}>
-                <Typography
-                  variant="h3"
-                  gutterBottom
-                  sx={{
-                    mb: 2,
-                    fontWeight: "bold",
-                    textShadow: "1px 1px 2px rgba(0,0,0,0.3)",
-                  }}>
-                  Total Recipes:
-                </Typography>
+                <h3>Total Recipes:</h3>
                 <Typography
                   variant="h3"
                   sx={{
                     backgroundColor: "#1976d2",
-                    width: "60px",
+                    width: "20px",
                     textAlign: "center",
                     color: "white",
                     padding: 1,
                     borderRadius: 10,
                     boxShadow: 2,
+                    fontSize: "1rem",
                   }}>
                   {totals.totalRecipes}
                 </Typography>
@@ -362,34 +320,23 @@ const Dashboard = () => {
                   justifyContent: "center",
                   width: "100%",
                   textAlign: "center",
-                  backgroundColor: "#e0f7fa",
+                  backgroundColor: "transparent",
                   borderRadius: 2,
                   padding: 2,
                   boxShadow: 2,
-                  ":hover": { boxShadow: 4, backgroundColor: "#b2ebf2" },
-                  transition:
-                    "box-shadow 0.3s ease-in-out , background-color 0.3s ease-in-out",
                 }}>
-                <Typography
-                  variant="h3"
-                  gutterBottom
-                  sx={{
-                    mb: 2,
-                    fontWeight: "bold",
-                    textShadow: "1px 1px 2px rgba(0,0,0,0.3)",
-                  }}>
-                  Total Ingedients:
-                </Typography>
+                <h3>Total Ingedients:</h3>
                 <Typography
                   variant="h3"
                   sx={{
                     backgroundColor: "#1976d2",
-                    width: "60px",
+                    width: "20px",
                     textAlign: "center",
                     color: "white",
                     padding: 1,
                     borderRadius: 10,
                     boxShadow: 2,
+                    fontSize: "1rem",
                   }}>
                   {totals.totalIngredients}
                 </Typography>
@@ -406,27 +353,15 @@ const Dashboard = () => {
                   justifyContent: "center",
                   width: "100%",
                   textAlign: "center",
-                  backgroundColor: "#e0f7fa",
+                  backgroundColor: "transparent",
                   borderRadius: 2,
                   padding: 2,
                   boxShadow: 2,
-                  ":hover": { boxShadow: 4, backgroundColor: "#b2ebf2" },
-                  transition:
-                    "box-shadow 0.3s ease-in-out , background-color 0.3s ease-in-out",
                 }}>
                 {!showRecipeDetails ? (
                   <>
-                    <Typography
-                      variant="h3"
-                      gutterBottom
-                      sx={{
-                        mb: 2,
-                        fontWeight: "bold",
-                        textShadow: "1px 1px 2px rgba(0,0,0,0.3)",
-                      }}>
-                      Most Recent Recipe:
-                    </Typography>
-                    <Typography variant="h4" sx={{ fontStyle: "italic" }}>
+                    <h3>Most Recent Recipe:</h3>
+                    <Typography variant="h4" sx={{ fontStyle: "italic", fontSize: "1rem", }}>
                       ({new Date(recentRecipe.createdAt).toLocaleDateString()})
                     </Typography>
 
@@ -444,6 +379,7 @@ const Dashboard = () => {
                         borderRadius: 10,
                         boxShadow: 2,
                         fontWeight: "bold",
+                        fontSize: "2rem",
                         ":hover": {
                           boxShadow: 4,
                           backgroundColor: "#115293",
@@ -464,6 +400,7 @@ const Dashboard = () => {
                         mb: 2,
                         fontWeight: "bold",
                         textShadow: "1px 1px 2px rgba(0,0,0,0.3)",
+                        fontSize: "2rem",
                       }}>
                       {recentRecipe.name}
                     </Typography>

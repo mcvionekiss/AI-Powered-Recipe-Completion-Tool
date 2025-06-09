@@ -1,17 +1,28 @@
-import axios from 'axios';
-import React, { useState } from 'react';
-import { Box, Container, Typography, TextField, Button, Alert } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
+import axios from "axios";
+import React, { useState } from "react";
+import {
+  Box,
+  Container,
+  Typography,
+  TextField,
+  Button,
+  Alert,
+} from "@mui/material";
+import { useNavigate } from "react-router-dom";
+import { useContext } from "react";
+import { UserContext } from "../Context/UserContext";
 
-const LogInForm = () => {
+const LogInForm = ({ onSuccess }) => {
+  const { fetchUser } = useContext(UserContext);
+
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
-    email: '', password: ''
+    email: "",
+    password: "",
   });
 
-  const [error, setError] = useState('');
-
+  const [error, setError] = useState("");
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -23,19 +34,23 @@ const LogInForm = () => {
     const { email, password } = formData;
 
     try {
-      const res = await axios.post(`${process.env.REACT_APP_BASE_API_URL}/users/login`, { email, password }, {
-        withCredentials: true,
-      });
+      const res = await axios.post(
+        `${process.env.REACT_APP_BASE_API_URL}/users/login`,
+        { email, password },
+        {
+          withCredentials: true,
+        }
+      );
       if (res.data.success) {
-        localStorage.setItem('isLoggedIn', 'true');
-        localStorage.setItem('userEmail', email);
-        navigate('/profile');
+        await fetchUser();
+        if (onSuccess) onSuccess();
+        navigate("/dashboard");
       } else {
-        setError(res.data.message || 'Invalid login');
+        setError(res.data.message || "Invalid login");
       }
     } catch (err) {
-      setError('Login failed. Please try again.');
-      console.error('Login error:', err);
+      setError("Login failed. Please try again.");
+      console.error("Login error:", err);
     }
   };
 
@@ -45,8 +60,21 @@ const LogInForm = () => {
         Log In
       </Typography>
       <Box component="form" onSubmit={handleSubmit}>
-        <TextField fullWidth name="email" label="Email Address" onChange={handleChange} margin="normal" />
-        <TextField fullWidth name="password" type="password" label="Password" onChange={handleChange} margin="normal" />
+        <TextField
+          fullWidth
+          name="email"
+          label="Email Address"
+          onChange={handleChange}
+          margin="normal"
+        />
+        <TextField
+          fullWidth
+          name="password"
+          type="password"
+          label="Password"
+          onChange={handleChange}
+          margin="normal"
+        />
         {error && (
           <Alert severity="error" sx={{ mt: 2 }}>
             {error}
@@ -55,9 +83,12 @@ const LogInForm = () => {
         <Button type="submit" fullWidth variant="contained" sx={{ mt: 3 }}>
           Login
         </Button>
-        <Typography variant="body2" sx={{ mt: 3, textAlign: 'center' }}>
-          Don&apos;t have an account?{' '}
-          <Button variant="text" size="small" onClick={() => navigate('/signup')}>
+        <Typography variant="body2" sx={{ mt: 3, textAlign: "center" }}>
+          Don&apos;t have an account?{" "}
+          <Button
+            variant="text"
+            size="small"
+            onClick={() => navigate("/signup")}>
             Sign Up
           </Button>
         </Typography>

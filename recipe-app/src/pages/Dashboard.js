@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState, useContext } from "react";
 import { Box, Typography, Card, CardContent, Divider } from "@mui/material";
 import RegularSidebar from "../components/RegularSidebar";
 import ProfileButton from "../components/ProfileButton";
@@ -7,8 +7,10 @@ import TipNotification from "../components/TipNotification";
 import LogIn from "../pages/LogIn";
 import axios from "axios";
 import Button from "@mui/material/Button";
+import { UserContext } from "../Context/UserContext"; // Import the UserContext
 
 const Dashboard = () => {
+  const { user, userId, userLoaded } = useContext(UserContext);
   const getRandomColor = () =>
     "#" +
     Math.floor(Math.random() * 16777215)
@@ -45,7 +47,7 @@ const Dashboard = () => {
         `${process.env.REACT_APP_BASE_API_URL}/users/ratios`,
 
         {
-          params: { userId: localStorage.getItem("userId") },
+          params: { userId: userId },
           withCredentials: true,
         }
       );
@@ -55,14 +57,14 @@ const Dashboard = () => {
     } catch (error) {
       console.error("Error loading food ratios:", error);
     }
-  }, []);
+  }, [userId]);
 
   const fetchTotalRecipes = useCallback(async () => {
     try {
       const response = await axios.get(
         `${process.env.REACT_APP_BASE_API_URL}/users/totalRecipes`,
         {
-          params: { userId: localStorage.getItem("userId") },
+          params: { userId: userId },
           withCredentials: true,
         }
       );
@@ -74,14 +76,14 @@ const Dashboard = () => {
     } catch (error) {
       console.error("Error loading total recipes:", error);
     }
-  }, []);
+  }, [userId]);
 
   const fetchTotalIngredients = useCallback(async () => {
     try {
       const response = await axios.get(
         `${process.env.REACT_APP_BASE_API_URL}/users/totalIngredients`,
         {
-          params: { userId: localStorage.getItem("userId") },
+          params: { userId: userId },
           withCredentials: true,
         }
       );
@@ -93,14 +95,14 @@ const Dashboard = () => {
     } catch (error) {
       console.error("Error loading total ingredients:", error);
     }
-  }, []);
+  }, [userId]);
 
   const fetchRecentRecipe = useCallback(async () => {
     try {
       const response = await axios.get(
         `${process.env.REACT_APP_BASE_API_URL}/users/recentRecipe`,
         {
-          params: { userId: localStorage.getItem("userId") },
+          params: { userId: userId },
           withCredentials: true,
         }
       );
@@ -109,10 +111,17 @@ const Dashboard = () => {
     } catch (error) {
       console.error("Error loading recent recipe:", error);
     }
-  }, []);
+  }, [userId]);
 
   useEffect(() => {
-    // fetchProfile();
+    if (!user || !userId) {
+      return;
+    }
+
+    console.log("User ID:", userId);
+    console.log("User Loaded:", userLoaded);
+    console.log("User:", user);
+
     fetchFoodRatios();
     fetchTotalRecipes();
     fetchTotalIngredients();
@@ -122,12 +131,14 @@ const Dashboard = () => {
     fetchTotalRecipes,
     fetchTotalIngredients,
     fetchRecentRecipe,
+    userId,
+    userLoaded,
+    user,
   ]);
 
   // load food ratios from db
 
   const [loginOpen, setLoginOpen] = useState(false);
-
   return (
     <>
       <ProfileButton onTriggerLogin={() => setLoginOpen(true)} />
@@ -173,14 +184,13 @@ const Dashboard = () => {
               }}>
               <CardContent
                 sx={{
-                    alignSelf: "flex-start",  // Align to the left of the Card
-                    width: "100%",            // Ensure it spans full width
-                    textAlign: "left",        // Align text left within the box
-                    padding: 0,
-                    border: 0,
-                    margin: 0,
-                  }}
-                >
+                  alignSelf: "flex-start", // Align to the left of the Card
+                  width: "100%", // Ensure it spans full width
+                  textAlign: "left", // Align text left within the box
+                  padding: 0,
+                  border: 0,
+                  margin: 0,
+                }}>
                 <h2>Your Food Ratios</h2>
               </CardContent>
               {/* Food Category Ratios */}
@@ -267,9 +277,9 @@ const Dashboard = () => {
               }}>
               <CardContent
                 sx={{
-                  alignSelf: "flex-start",  // Align to the left of the Card
-                  width: "100%",            // Ensure it spans full width
-                  textAlign: "left",        // Align text left within the box
+                  alignSelf: "flex-start", // Align to the left of the Card
+                  width: "100%", // Ensure it spans full width
+                  textAlign: "left", // Align text left within the box
                   padding: 0,
                   border: 0,
                   margin: 0,
@@ -361,7 +371,9 @@ const Dashboard = () => {
                 {!showRecipeDetails ? (
                   <>
                     <h3>Most Recent Recipe:</h3>
-                    <Typography variant="h4" sx={{ fontStyle: "italic", fontSize: "1rem", }}>
+                    <Typography
+                      variant="h4"
+                      sx={{ fontStyle: "italic", fontSize: "1rem" }}>
                       ({new Date(recentRecipe.createdAt).toLocaleDateString()})
                     </Typography>
 

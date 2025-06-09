@@ -8,42 +8,39 @@ const LogIn = ({ open, onClose }) => {
     <Modal open={open} onClose={onClose}>
       <Box
         sx={{
-          position: 'fixed',
+          position: "fixed",
           top: 0,
           left: 0,
-          width: '100vw',
-          height: '100vh',
-          backdropFilter: 'blur(4px)', // this blurs the background
-          backgroundColor: 'rgba(0,0,0,0.4)', // darken with transparency
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}
-      >
+          width: "100vw",
+          height: "100vh",
+          backdropFilter: "blur(4px)", // this blurs the background
+          backgroundColor: "rgba(0,0,0,0.4)", // darken with transparency
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}>
         <Paper
           elevation={4}
           sx={{
-            width: '100%',
+            width: "100%",
             maxWidth: 400,
             p: 4,
             borderRadius: 2,
             mx: 2,
-            position: 'relative', // required for absolute close button
-          }}
-        >
+            position: "relative", // required for absolute close button
+          }}>
           {/* Close Button */}
           <IconButton
             onClick={onClose}
             sx={{
-              position: 'absolute',
+              position: "absolute",
               top: 8,
               right: 8,
             }}
-            aria-label="close"
-          >
+            aria-label="close">
             <CloseIcon />
           </IconButton>
-          <LogInForm />
+          <LogInForm onSuccess={onClose} />
         </Paper>
       </Box>
     </Modal>

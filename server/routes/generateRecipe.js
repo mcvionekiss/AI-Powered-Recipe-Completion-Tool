@@ -48,7 +48,7 @@ router.get("/generate", async (req, res) => {
             "cuisine": cuisine, //e.g. "Indian", "Italian", "Chinese", "Mexican", "American"
             "description": recipe_description",
             "instructions": cooking_instructions,
-            "ingredientsUsed": {"ingredientName": quantity, ...},
+            "ingredients_used": {"ingredientName": quantity, ...},
             "extraIngredients": {"ingredientName": quantity, ...}  //ingredients that user does not have but are needed for the recipe
 
           }

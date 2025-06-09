@@ -27,7 +27,7 @@ const About = () => {
         >
           {/* Header */}
           <Box sx={{ textAlign: 'center', mt: 2 }}>
-            <Typography variant="h4" component="h1">ABOUT US</Typography>
+            <Typography variant="h4" component="h1">About Us</Typography>
             <hr
               style={{
                 margin: '16px 0',
@@ -61,9 +61,27 @@ const About = () => {
                 overflow: 'auto',
               }}
             >
-              <Typography variant="h6" align="center">CONTACT US</Typography>
+              <Typography variant="h6" align="center">Contact Us</Typography>
               <Box component="hr" sx={{ borderTop: '2px solid #000', width: '50%', mx: 'auto', my: 1 }} />
-              {/* TODO: Add your contact information here */}
+              <Typography>
+                We are a team of Software Engineering students at UC Irvine
+              </Typography>
+              <Typography>
+                • Tenzin Tsundue (<a href="mailto:ttsundue@uci.edu">ttsundue@uci.edu</a>):<br />
+                A frontend developer experienced in React and Express, dedicated to creating clean, responsive user interfaces.
+              </Typography>
+              <Typography>
+                • Axel Dejesus Lopez (<a href="mailto:axeldl@uci.edu">axeldl@uci.edu</a>):<br />
+                A versatile developer fluent in many programming languages, bringing flexibility and depth to our design.
+              </Typography>
+              <Typography>
+                • Jacey Deng (<a href="mailto:jiannind@uci.edu">jiannind@uci.edu</a>):<br />
+                A full-stack developer, passionate about building scalable and user-friendly web applications.
+              </Typography>
+              <Typography>
+                • Rayyaan Nadeem (<a href="mailto:rnadeem@uci.edu">rnadeem@uci.edu</a>):<br />
+                A developer who excels at building clean, reusable React components and interactive UI features.
+              </Typography>
             </Box>
 
             {/* Project Details */}
@@ -80,9 +98,11 @@ const About = () => {
                 overflow: 'auto',
               }}
             >
-              <Typography variant="h6" align="center">PROJECT DETAILS</Typography>
+              <Typography variant="h6" align="center">Project Details</Typography>
               <Box component="hr" sx={{ borderTop: '2px solid #000', width: '50%', mx: 'auto', my: 1 }} />
-              {/* TODO: Add your project details here */}
+              <Typography>
+                Our app is a smart recipe assistant designed to help users make the most of the ingredients they already have. Users can input available ingredients to the Fridge page and enter their recipe preferences in the Kitchen page, and the app will return recipe suggestions that closely match their input. We integrate ChatGPT to dynamically generate customized recipes based on the user’s ingredients and preferences. This allows for more creative, flexible, and personalized meal ideas.
+              </Typography>
             </Box>
           </Box>
         </Box>

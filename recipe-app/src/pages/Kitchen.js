@@ -18,6 +18,8 @@ const Kitchen = () => {
   const [loginOpen, setLoginOpen] = useState(false);
   const [recipesToGenerate, setNumRecipes] = useState(1);
   const [items, setItems] = useState([]);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const open = Boolean(anchorEl);
 
   const [selectedItem, setSelectedItem] = useState(null);
   const [searchText, setSearchText] = useState("");
@@ -27,14 +29,12 @@ const Kitchen = () => {
   };
 
 
-  const [anchorEl, setAnchorEl] = useState(null);
-  const open = Boolean(anchorEl);
-
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
 
   const handleClose = (option) => {
+    setNumRecipes(option);
     if (option) {
       console.log("Selected Option:", option);
     }
@@ -202,21 +202,9 @@ const Kitchen = () => {
         <IconButton
           id="filter"
           onClick={handleClick}
-          sx={{ display: "flex", alignItems: "center", gap: 1 }}
+          sx={{ display: "flex", alignItems: "center", gap: 1}}
         >
-          <img
-            src={filterIcon}
-            alt="filter icon"
-            style={{
-              width: "16px",
-              height: "16px",
-              borderRadius: "50%",
-              border: "2px solid rgb(0, 0, 0)",
-              padding: "4px",
-              backgroundColor: "white",
-            }}
-          />
-          Filter
+          Generating {recipesToGenerate} recipe(s)
         </IconButton>
 
         <Menu
@@ -225,9 +213,9 @@ const Kitchen = () => {
           onClose={() => handleClose(null)}
           anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
         >
-          <MenuItem onClick={() => setNumRecipes(1)}>Option 1</MenuItem>
-          <MenuItem onClick={() => setNumRecipes(2)}>Option 2</MenuItem>
-          <MenuItem onClick={() => setNumRecipes(3)}>Option 3</MenuItem>
+          <MenuItem onClick={() => handleClose(1)}>1 Recipes</MenuItem>
+          <MenuItem onClick={() => handleClose(2)}>2 Recipes</MenuItem>
+          <MenuItem onClick={() => handleClose(3)}>3 Recipes</MenuItem>
         </Menu>
         <button
               id="generateRecipe"

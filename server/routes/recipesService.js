@@ -128,17 +128,4 @@ router.post("/addRecipe", async (req, res) => {
   }
 });
 
-// Get recipe food ratios
-router.get("/foodRatios", async (req, res) => {
-  console.log("Fetching food ratios");
-  try {
-    const [rows] = await db.execute("SELECT * FROM foodRatio WHERE userId=?", [
-      req.query.userId,
-    ]);
-    res.json(rows);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
-
 module.exports = router;

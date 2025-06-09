@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useCallback } from "react";
 import RegularSidebar from "../components/RegularSidebar";
 import ProfileButton from "../components/ProfileButton";
 import { Box } from "@mui/material";
@@ -21,7 +21,7 @@ const Kitchen = () => {
     setSelectedItem(recipe);
   };
 
-  const getUserRecipes = async () => {
+  const getUserRecipes = useCallback(async () => {
     try {
       console.log("acquiring user recipes");
       const res = await axios.get(
@@ -45,7 +45,7 @@ const Kitchen = () => {
     } catch (error) {
       console.log("Error fetching user recipes", error);
     }
-  };
+  }, []);
 
   const hasFetched = useRef(false);
 

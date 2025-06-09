@@ -37,3 +37,12 @@ app.use("/ingredients", ingredients_route); // route for ingredients service
 app.use("/users", user_route); // route for user service
 app.use("/recipe", recipe_route); // route for user service
 app.use("/recipes", recipes_route); // route for user service
+
+console.log("Available /users routes:");
+user_route.stack.forEach((r) => {
+  if (r.route && r.route.path) {
+    console.log(
+      ` - ${r.route.stack[0].method.toUpperCase()} /users${r.route.path}`
+    );
+  }
+});

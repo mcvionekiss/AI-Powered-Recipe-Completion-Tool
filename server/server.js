@@ -1,11 +1,21 @@
 require("dotenv").config();
 
 const express = require("express");
+const https = require('https');
+const fs = require('fs');
+
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
 
 // create express app
 const app = express();
+
+const options = {
+  key: fs.readFileSync('/home/ec2-user/certs/key.pem'),
+  cert: fs.readFileSync('/home/ec2-user/certs/cert.pem')
+};
+
+
 app.use(
   cors({
     origin: [
@@ -15,8 +25,9 @@ app.use(
     credentials: true,
   })
 );
-app.listen(process.env.EXPRESS_PORT, () => {
-  console.log("Server is listening on port", process.env.EXPRESS_PORT);
+
+https.createServer(options, app).listen(process.env.EXPRESS_PORT, () => {
+  console.log('HTTPS Server running on port', process.env.EXPRESS_PORT);
 });
 
 const ingredients_route = require("./routes/ingredientsService.js");
@@ -35,8 +46,8 @@ app.use((req, res, next) => {
 // routes
 app.use("/ingredients", ingredients_route); // route for ingredients service
 app.use("/users", user_route); // route for user service
-app.use("/recipe", recipe_route); // route for user service
-app.use("/recipes", recipes_route); // route for user service
+app.use("/recipe", recipe_route); // route for recipe generation service
+app.use("/recipes", recipes_route); // route for recipe service
 
 console.log("Available /users routes:");
 user_route.stack.forEach((r) => {

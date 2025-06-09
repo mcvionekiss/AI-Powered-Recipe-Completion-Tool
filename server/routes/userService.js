@@ -60,8 +60,8 @@ router.post("/login", async (req, res) => {
       const user = rows[0];
       res.cookie("userId", user.id, {
         httpOnly: true,
-        sameSite: "Lax",
-        secure: false, // change to true in production with HTTPS
+        sameSite: "None",
+        secure: true, // change to true in production with HTTPS
       });
       res.json({ success: true, user });
     } else {
@@ -132,7 +132,7 @@ router.get("/totalRecipes", async (req, res) => {
   }
 });
 
-// grab t otal number of ingredients for user
+// grab total number of ingredients for user
 router.get("/totalIngredients", async (req, res) => {
   console.log("Fetching total number of ingredients for user");
 

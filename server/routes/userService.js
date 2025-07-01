@@ -170,7 +170,7 @@ router.get("/recentRecipe", async (req, res) => {
 router.post("/logout", (req, res) => {
   res.clearCookie("userId", {
     httpOnly: true,
-    sameSite: "Lax",
+    sameSite: "None",
     secure: true, // change to true in production with HTTPS
   });
   // domain: "localhost", // specify domain if needed});

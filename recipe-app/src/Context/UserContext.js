@@ -42,9 +42,6 @@ export const UserProvider = ({ children }) => {
       console.error("Logout failed:", err);
     }
   };
-  useEffect(() => {
-    fetchUser();
-  }, []);
 
   return (
     <UserContext.Provider

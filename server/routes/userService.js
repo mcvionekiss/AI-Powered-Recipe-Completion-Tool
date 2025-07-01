@@ -60,7 +60,7 @@ router.post("/login", async (req, res) => {
       const user = rows[0];
       res.cookie("userId", user.id, {
         httpOnly: true,
-        sameSite: "Lax",
+        sameSite: "None",
         secure: true, // change to true in production with HTTPS
       });
       res.json({ success: true, user });

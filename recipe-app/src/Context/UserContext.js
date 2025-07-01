@@ -8,20 +8,24 @@ export const UserProvider = ({ children }) => {
   const [userLoaded, setUserLoaded] = useState(false);
 
   const fetchUser = async () => {
-    try {
-      const res = await axios.get(
-        `${process.env.REACT_APP_BASE_API_URL}/users/profile`,
-        { withCredentials: true }
-      );
+  try {
+    const res = await axios.get(`${process.env.REACT_APP_BASE_API_URL}/users/profile`, {
+      withCredentials: true
+    });
+    if (res.data?.id) {
       setUser(res.data);
       localStorage.setItem("userId", res.data.id);
-    } catch (err) {
+    } else {
       setUser(null);
       localStorage.removeItem("userId");
-    } finally {
-      setUserLoaded(true);
     }
-  };
+  } catch (err) {
+    setUser(null);
+    localStorage.removeItem("userId");
+  } finally {
+    setUserLoaded(true);
+  }
+};
 
   const logout = async () => {
     console.log("Logging out user");

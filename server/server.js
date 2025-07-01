@@ -38,6 +38,18 @@ app.use("/users", user_route); // route for user service
 app.use("/recipe", recipe_route); // route for user service
 app.use("/recipes", recipes_route); // route for user service
 
+// root route for testing if backend is running
+app.get("/", (req, res) => {
+  res.send(`
+    <h2>✅ Backend is running</h2>
+    <p>Example account:</p>
+    <ul>
+      <li>Email: <code>demo@example.com</code></li>
+      <li>Password: <code>password123</code></li>
+    </ul>
+  `);
+});
+
 console.log("Available /users routes:");
 user_route.stack.forEach((r) => {
   if (r.route && r.route.path) {

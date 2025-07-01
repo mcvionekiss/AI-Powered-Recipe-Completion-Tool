@@ -171,7 +171,7 @@ router.post("/logout", (req, res) => {
   res.clearCookie("userId", {
     httpOnly: true,
     sameSite: "Lax",
-    secure: false, // change to true in production with HTTPS
+    secure: true, // change to true in production with HTTPS
   });
   // domain: "localhost", // specify domain if needed});
   res.status(200).json({ message: "Logged out" });
